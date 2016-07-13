@@ -31,3 +31,5 @@ use Mix.Config
 
 config :vaultex, app_id: "foo"
 config :vaultex, user_id: "bar"
+
+import_config "#{Mix.env}.exs"

@@ -1,6 +1,7 @@
 defmodule Vaultex.Client do
   use GenServer
   @version "v1"
+  @httpoison Application.get_env(:vaultex, :httpoison)
 
   def start_link() do
     GenServer.start_link(__MODULE__, %{progress: "starting"}, name: :vaultex)
@@ -22,14 +23,14 @@ defmodule Vaultex.Client do
     {:ok, response} = request(:post, "#{state.url}auth/app-id/login", %{app_id: app_id, user_id: user_id})
 
     case response.body |> Poison.Parser.parse! do
-      %{"errors" => messages} -> {:reply, {:error, :rejected}, Map.merge(state, %{messages: messages})}
+      %{"errors" => messages} -> {:stop, {:error, messages}, Map.merge(state, %{messages: messages})}
       %{"auth" => properties} -> {:reply, {:ok, :authenticated}, Map.merge(state, %{token: properties["auth"]["client_token"]})}
     end
 
   end
 
   defp request(method, url, params = %{}) do
-    HTTPoison.request(method, url, Poison.Encoder.encode(params, []), [{"Content-Type", "application/json"}])
+    @httpoison.request(method, url, Poison.Encoder.encode(params, []), [{"Content-Type", "application/json"}])
   end
 
   defp get_env(:host) do
