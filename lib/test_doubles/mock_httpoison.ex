@@ -1,6 +1,10 @@
 defmodule Vaultex.Test.TestDoubles.MockHTTPoison do
 
-  def request(:post, _, _, _) do
-    {:ok, %{body: Poison.Encoder.encode(%{auth: %{client_token: "mytoken"}}, [])}}
+  def request(method, url, params, _) do
+    cond do
+      List.to_string(params) |> String.contains?("good") -> {:ok, %{body: Poison.Encoder.encode(%{auth: %{client_token: "mytoken"}}, [])}}
+      :else -> {:ok, %{body: Poison.Encoder.encode(%{errors: ["not_authenticated"] }, [])}}
+    end
   end
+
 end

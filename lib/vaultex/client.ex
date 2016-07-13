@@ -23,7 +23,7 @@ defmodule Vaultex.Client do
     {:ok, response} = request(:post, "#{state.url}auth/app-id/login", %{app_id: app_id, user_id: user_id})
 
     case response.body |> Poison.Parser.parse! do
-      %{"errors" => messages} -> {:stop, {:error, messages}, Map.merge(state, %{messages: messages})}
+      %{"errors" => messages} -> {:reply, {:error, messages}, Map.merge(state, %{messages: messages})}
       %{"auth" => properties} -> {:reply, {:ok, :authenticated}, Map.merge(state, %{token: properties["auth"]["client_token"]})}
     end
 
