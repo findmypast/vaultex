@@ -20,13 +20,19 @@ defmodule Vaultex.Client do
     app_id = Application.get_env(:vaultex, :app_id, nil)
     user_id = Application.get_env(:vaultex, :user_id, nil)
 
-    {:ok, response} = request(:post, "#{state.url}auth/app-id/login", %{app_id: app_id, user_id: user_id})
+    request(:post, "#{state.url}auth/app-id/login", %{app_id: app_id, user_id: user_id})
+    |> handle_vault_response(state)
+  end
 
+  defp handle_vault_response({:ok, response}, state) do
     case response.body |> Poison.Parser.parse! do
       %{"errors" => messages} -> {:reply, {:error, messages}, Map.merge(state, %{messages: messages})}
       %{"auth" => properties} -> {:reply, {:ok, :authenticated}, Map.merge(state, %{token: properties["auth"]["client_token"]})}
     end
+  end
 
+  defp handle_vault_response({_, _}, state) do
+      {:reply, {:error, ["Bad response from vault"]}, Map.merge(state, %{messages: "Bad response from vault"})}
   end
 
   defp request(method, url, params = %{}) do
