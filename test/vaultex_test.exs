@@ -14,7 +14,7 @@ defmodule VaultexTest do
 
   test "Authentication of app_id and user_id causes an exception" do
     Application.put_env(:vaultex, :app_id, "boom")
-    assert Vaultex.Client.auth == {:error, ["Bad response from vault"]}
+    assert Vaultex.Client.auth == {:error, ["Bad response from vault", "econnrefused"]}
   end
 
   test "Read of valid secret key returns the correct value" do
@@ -36,7 +36,7 @@ defmodule VaultexTest do
   test "Read of a secret key causes and exception" do
     Application.put_env(:vaultex, :app_id, "good")
     Vaultex.Client.auth()
-    assert Vaultex.Client.read("secret/boom") == {:error, ["Bad response from vault"]}
+    assert Vaultex.Client.read("secret/boom") == {:error, ["Bad response from vault", "econnrefused"]}
   end
 
 end

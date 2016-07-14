@@ -3,7 +3,7 @@ defmodule Vaultex.Test.TestDoubles.MockHTTPoison do
   def request(:post, _url, params, _) do
     cond do
       List.to_string(params) |> String.contains?("good") -> {:ok, %{body: Poison.Encoder.encode(%{"auth" => %{"client_token" => "mytoken"}}, [])}}
-      List.to_string(params) |> String.contains?("boom") -> {:error, %{ }}
+      List.to_string(params) |> String.contains?("boom") -> {:error, %HTTPoison.Error{id: nil, reason: :econnrefused}}
       :else -> {:ok, %{body: Poison.Encoder.encode(%{errors: ["Not Authenticated"] }, [])}}
     end
   end
@@ -13,7 +13,7 @@ defmodule Vaultex.Test.TestDoubles.MockHTTPoison do
       url |> String.contains?("secret/foo") -> {:ok, %{body: Poison.Encoder.encode(%{"data" => %{"value" => "bar"}},[])}}
       url |> String.contains?("secret/baz") -> {:ok, %{body: Poison.Encoder.encode(%{"errors" => []},[])}}
       url |> String.contains?("secret/faz") -> {:ok, %{body: Poison.Encoder.encode(%{"errors" => ["Not Authenticated"]},[])}}
-      url |> String.contains?("secret/boom") -> {:error, %{ }}
+      url |> String.contains?("secret/boom") -> {:error, %HTTPoison.Error{id: nil, reason: :econnrefused}}
       :else -> {:ok, %{} }
     end
   end

@@ -26,7 +26,7 @@ defmodule Vaultex.Client do
   end
 
   def handle_call({:read, key}, _from, state = %{}) do
-    {:reply, {:error, ["Not Authenticated"]}, Map.merge(state, %{messages: ["Not Authenticated"]})}
+    {:reply, {:error, ["Not Authenticated"]}, state}
   end
 
   def handle_call({:auth}, _from, state) do
@@ -39,25 +39,25 @@ defmodule Vaultex.Client do
 
   defp handle_read_vault_response({:ok, response}, state) do
     case response.body |> Poison.Parser.parse! do
-      %{"data" => data} -> {:reply, {:ok, data["value"]}, Map.merge(state, %{value: data["value"]})}
-      %{"errors" => []} -> {:reply, {:error, ["Key not found"]}, Map.merge(state, %{messages: ["Key not found"]})}
-      %{"errors" => messages} -> {:reply, {:error, messages}, Map.merge(state, %{messages: messages})}
+      %{"data" => data} -> {:reply, {:ok, data["value"]}, state}
+      %{"errors" => []} -> {:reply, {:error, ["Key not found"]}, state}
+      %{"errors" => messages} -> {:reply, {:error, messages}, state}
     end
   end
 
-  defp handle_read_vault_response({_, _}, state) do
-      {:reply, {:error, ["Bad response from vault"]}, Map.merge(state, %{messages: "Bad response from vault"})}
+  defp handle_read_vault_response({_, %HTTPoison.Error{reason: reason}}, state) do
+      {:reply, {:error, ["Bad response from vault", "#{reason}"]}, state}
   end
 
   defp handle_auth_vault_response({:ok, response}, state) do
     case response.body |> Poison.Parser.parse! do
-      %{"errors" => messages} -> {:reply, {:error, messages}, Map.merge(state, %{messages: messages})}
+      %{"errors" => messages} -> {:reply, {:error, messages}, state}
       %{"auth" => properties} -> {:reply, {:ok, :authenticated}, Map.merge(state, %{token: properties["client_token"]})}
     end
   end
 
-  defp handle_auth_vault_response({_, _}, state) do
-      {:reply, {:error, ["Bad response from vault"]}, Map.merge(state, %{messages: "Bad response from vault"})}
+  defp handle_auth_vault_response({_, %HTTPoison.Error{reason: reason}}, state) do
+      {:reply, {:error, ["Bad response from vault", "#{reason}"]}, state}
   end
 
   defp request(method, url, params = %{}, headers) do
