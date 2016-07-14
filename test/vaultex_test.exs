@@ -11,4 +11,9 @@ defmodule VaultexTest do
     Application.put_env(:vaultex, :app_id, "bad")
     assert Vaultex.Client.auth == {:error, ["not_authenticated"]}
   end
+
+  test "Authentication of app_id and user_id causes an exception" do
+    Application.put_env(:vaultex, :app_id, "boom")
+    assert Vaultex.Client.auth == {:error, ["No response from vault"]}
+  end
 end
