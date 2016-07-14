@@ -17,7 +17,12 @@ defmodule VaultexTest do
     assert Vaultex.Client.auth == {:error, ["Bad response from vault"]}
   end
 
-  # test "Read of valid secret key returns the correct value" do
-  #   assert Vaultex.Client.read("secret/foo") == "bar"
-  # end
+  test "Read of valid secret key returns the correct value" do
+    Application.put_env(:vaultex, :app_id, "good")
+    Vaultex.Client.auth()
+    assert Vaultex.Client.read("secret/foo") == {:ok, "bar"}
+  end
+
+  # Test invalid secret key
+  # Test reading when not authenticated
 end

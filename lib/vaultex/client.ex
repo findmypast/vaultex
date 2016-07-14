@@ -16,27 +16,43 @@ defmodule Vaultex.Client do
     GenServer.call(:vaultex, {:auth})
   end
 
+  def read(key) do
+    GenServer.call(:vaultex, {:read, key})
+  end
+
+  def handle_call({:read, key}, _from, state) do
+    request(:get, "#{state.url}#{key}", %{}, [{"X-Vault-Token", state.token}])
+    |> handle_read_vault_response(state)
+  end
+
   def handle_call({:auth}, _from, state) do
     app_id = Application.get_env(:vaultex, :app_id, nil)
     user_id = Application.get_env(:vaultex, :user_id, nil)
 
-    request(:post, "#{state.url}auth/app-id/login", %{app_id: app_id, user_id: user_id})
-    |> handle_vault_response(state)
+    request(:post, "#{state.url}auth/app-id/login", %{app_id: app_id, user_id: user_id}, [{"Content-Type", "application/json"}])
+    |> handle_auth_vault_response(state)
   end
 
-  defp handle_vault_response({:ok, response}, state) do
+  defp handle_read_vault_response({:ok, response}, state) do
     case response.body |> Poison.Parser.parse! do
+      %{"data" => data} -> {:reply, {:ok, data["value"]}, Map.merge(state, %{value: data["value"]})}
       %{"errors" => messages} -> {:reply, {:error, messages}, Map.merge(state, %{messages: messages})}
-      %{"auth" => properties} -> {:reply, {:ok, :authenticated}, Map.merge(state, %{token: properties["auth"]["client_token"]})}
     end
   end
 
-  defp handle_vault_response({_, _}, state) do
+  defp handle_auth_vault_response({:ok, response}, state) do
+    case response.body |> Poison.Parser.parse! do
+      %{"errors" => messages} -> {:reply, {:error, messages}, Map.merge(state, %{messages: messages})}
+      %{"auth" => properties} -> {:reply, {:ok, :authenticated}, Map.merge(state, %{token: properties["client_token"]})}
+    end
+  end
+
+  defp handle_auth_vault_response({_, _}, state) do
       {:reply, {:error, ["Bad response from vault"]}, Map.merge(state, %{messages: "Bad response from vault"})}
   end
 
-  defp request(method, url, params = %{}) do
-    @httpoison.request(method, url, Poison.Encoder.encode(params, []), [{"Content-Type", "application/json"}])
+  defp request(method, url, params = %{}, headers) do
+    @httpoison.request(method, url, Poison.Encoder.encode(params, []), headers)
   end
 
   defp get_env(:host) do
