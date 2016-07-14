@@ -20,9 +20,13 @@ defmodule Vaultex.Client do
     GenServer.call(:vaultex, {:read, key})
   end
 
-  def handle_call({:read, key}, _from, state) do
-    request(:get, "#{state.url}#{key}", %{}, [{"X-Vault-Token", state.token}])
+  def handle_call({:read, key}, _from, state = %{token: token}) do
+    request(:get, "#{state.url}#{key}", %{}, [{"X-Vault-Token", token}])
     |> handle_read_vault_response(state)
+  end
+
+  def handle_call({:read, key}, _from, state = %{}) do
+    {:reply, {:error, ["Not Authenticated"]}, Map.merge(state, %{messages: ["Not Authenticated"]})}
   end
 
   def handle_call({:auth}, _from, state) do
@@ -36,8 +40,13 @@ defmodule Vaultex.Client do
   defp handle_read_vault_response({:ok, response}, state) do
     case response.body |> Poison.Parser.parse! do
       %{"data" => data} -> {:reply, {:ok, data["value"]}, Map.merge(state, %{value: data["value"]})}
+      %{"errors" => []} -> {:reply, {:error, ["Key not found"]}, Map.merge(state, %{messages: ["Key not found"]})}
       %{"errors" => messages} -> {:reply, {:error, messages}, Map.merge(state, %{messages: messages})}
     end
+  end
+
+  defp handle_read_vault_response({_, _}, state) do
+      {:reply, {:error, ["Bad response from vault"]}, Map.merge(state, %{messages: "Bad response from vault"})}
   end
 
   defp handle_auth_vault_response({:ok, response}, state) do

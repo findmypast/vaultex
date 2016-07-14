@@ -9,7 +9,7 @@ defmodule VaultexTest do
 
   test "Authentication of app_id and user_id is unsuccessful" do
     Application.put_env(:vaultex, :app_id, "bad")
-    assert Vaultex.Client.auth == {:error, ["not_authenticated"]}
+    assert Vaultex.Client.auth == {:error, ["Not Authenticated"]}
   end
 
   test "Authentication of app_id and user_id causes an exception" do
@@ -23,6 +23,20 @@ defmodule VaultexTest do
     assert Vaultex.Client.read("secret/foo") == {:ok, "bar"}
   end
 
-  # Test invalid secret key
-  # Test reading when not authenticated
+  test "Read of non existing secret key returns error" do
+    Application.put_env(:vaultex, :app_id, "good")
+    Vaultex.Client.auth()
+    assert Vaultex.Client.read("secret/baz") == {:error, ["Key not found"]}
+  end
+
+  test "Read of a secret key when not authenticated returns error" do
+    assert Vaultex.Client.read("secret/faz") == {:error, ["Not Authenticated"]}
+  end
+
+  test "Read of a secret key causes and exception" do
+    Application.put_env(:vaultex, :app_id, "good")
+    Vaultex.Client.auth()
+    assert Vaultex.Client.read("secret/boom") == {:error, ["Bad response from vault"]}
+  end
+
 end
