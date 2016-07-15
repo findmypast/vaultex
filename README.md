@@ -4,16 +4,45 @@ A very simple read only client that authenticates and reads secrets from HashiCo
 
 ## Installation
 
-If [available in Hex](https://hex.pm/docs/publish), the package can be installed as:
+The package can be installed as:
 
   1. Add vaultex to your list of dependencies in `mix.exs`:
 
-        def deps do
-          [{:vaultex, "~> 0.0.1"}]
-        end
-
+```elixir
+def deps do
+  [{:vaultex, "~> 0.0.1"}]
+end
+```
   2. Ensure vaultex is started before your application:
 
-        def application do
-          [applications: [:vaultex]]
-        end
+```elixir
+def application do
+  [applications: [:vaultex]]
+end
+```
+## Configuration
+
+In your `config.exs` file add:
+
+```elixir
+config :vaultex, app_id: System.get_env("VAULT_APP_ID")
+config :vaultex, user_id: System.get_env("VAULT_USER_ID")
+```
+
+## Usage
+
+The library requires to authenticate first with:
+
+```elixir
+alias Vaultex.Client, as: Vault
+...
+
+Vault.auth #returns {:ok, :authenticated}
+```
+
+After successful authentication, you can read a secret with:
+
+```elixir
+...
+Vault.read("secret/foo") #returns {:ok, "bar"}
+```
