@@ -1,4 +1,9 @@
 defmodule Vaultex.Client do
+  @moduledoc """
+  Provides a functionality to authenticate and read from a vault endpoint.
+  The communication relies on :app_id and :user_id variables being set.
+  """
+
   use GenServer
   alias Vaultex.Auth, as: Auth
   alias Vaultex.Read, as: Read
@@ -13,10 +18,36 @@ defmodule Vaultex.Client do
     {:ok, Map.merge(state, %{url: url})}
   end
 
+  @doc """
+  Authenticates with vault using :app_id and :user_id values. This must be executed before attempting to read secrets from vault.
+
+  ## Examples
+
+    iex> Vaultex.Client.auth
+    {:ok, :authenticated}
+
+    iex> Vaultex.Client.auth
+    {:error, ["Something didn't work"]}
+  """
   def auth() do
     GenServer.call(:vaultex, {:auth})
   end
 
+  @doc """
+  Reads a secret from vault given a path.
+
+  ## Parameters
+
+    - key: A String path to be used for querying vault.
+
+  ## Examples
+
+    iex> Vaultex.Client.read "secret/foo"
+    {:ok, "bar"}
+
+    iex> Vaultex.Client.read "secret/baz"
+    {:error, ["Key not found"]}
+  """
   def read(key) do
     GenServer.call(:vaultex, {:read, key})
   end
