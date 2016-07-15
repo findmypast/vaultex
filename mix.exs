@@ -42,7 +42,7 @@ defmodule Vaultex.Mixfile do
 
   defp package do
     [# These are the default files included in the package
-     maintainers: ["Findmypast"],
+     maintainers: ["opensource@findmypast.com"],
      licenses: ["Apache 2.0"],
      links: %{"GitHub" => "https://github.com/findmypast/vaultex"}
   end
