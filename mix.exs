@@ -45,5 +45,6 @@ defmodule Vaultex.Mixfile do
      maintainers: ["opensource@findmypast.com"],
      licenses: ["Apache 2.0"],
      links: %{"GitHub" => "https://github.com/findmypast/vaultex"}
+    ]
   end
 end
