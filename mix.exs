@@ -36,8 +36,7 @@ defmodule Vaultex.Mixfile do
 
   defp description do
     """
-    A very simple Vault client that authenticates and reads secrets from the key. No other functionality is
-    implemented at this time.
+    A very simple read only client that authenticates and reads secrets from HashiCorop's Vault.
     """
   end
 

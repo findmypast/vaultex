@@ -1,6 +1,6 @@
 # Vaultex
 
-Read only client for communicating with HashiCorop's Vault.
+A very simple read only client that authenticates and reads secrets from HashiCorop's Vault.
 
 ## Installation
 
