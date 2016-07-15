@@ -7,6 +7,8 @@ defmodule Vaultex.Mixfile do
      elixir: "~> 1.2",
      build_embedded: Mix.env == :prod,
      start_permanent: Mix.env == :prod,
+     description: description(),
+     package: package(),
      deps: deps]
   end
 
@@ -14,7 +16,7 @@ defmodule Vaultex.Mixfile do
   #
   # Type "mix help compile.app" for more information
   def application do
-    [applications: [:logger, :httpoison], 
+    [applications: [:logger, :httpoison],
      mod: {Vaultex, []}]
   end
 
@@ -30,5 +32,19 @@ defmodule Vaultex.Mixfile do
   defp deps do
     [{:httpoison, "~> 0.9.0"},
     {:poison, "~> 2.0"}]
+  end
+
+  defp description do
+    """
+    A very simple Vault client that authenticates and reads secrets from the key. No other functionality is
+    implemented at this time.
+    """
+  end
+
+  defp package do
+    [# These are the default files included in the package
+     maintainers: ["Findmypast"],
+     licenses: ["Apache 2.0"],
+     links: %{"GitHub" => "https://github.com/findmypast/vaultex"}
   end
 end
