@@ -1,6 +1,6 @@
 # Vaultex
 
-**TODO: Add description**
+Read only client for communicating with HashiCorop's Vault.
 
 ## Installation
 
@@ -17,4 +17,3 @@ If [available in Hex](https://hex.pm/docs/publish), the package can be installed
         def application do
           [applications: [:vaultex]]
         end
-
