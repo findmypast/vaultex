@@ -29,6 +29,21 @@ config :vaultex, app_id: System.get_env("VAULT_APP_ID")
 config :vaultex, user_id: System.get_env("VAULT_USER_ID")
 ```
 
+The vault endpoint can be specified with environment variables:
+
+* `VAULT_HOST`
+* `VAULT_PORT`
+* `VAULT_SCHEME`
+
+Or application variables:
+
+* `:vaultex, :host`
+* `:vaultex, :port`
+* `:vaultex, :scheme`
+
+These default to `localhost`, `8200`, `http` respectively.
+
+
 ## Usage
 
 The library requires to authenticate first with:
