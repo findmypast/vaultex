@@ -1,5 +1,5 @@
 defmodule Vaultex.Auth do
-  @httpoison Application.get_env(:vaultex, :httpoison) || HTTPoison
+  @httpoison Application.get_env(:vaultex, :httpoison) # || HTTPoison
 
   def handle(state) do
     app_id = Application.get_env(:vaultex, :app_id, nil)

@@ -29,6 +29,7 @@ use Mix.Config
 #
 #     import_config "#{Mix.env}.exs"
 
+config :vaultex, httpoison: HTTPoison
 config :vaultex, app_id: "foo"
 config :vaultex, user_id: "bar"
 
