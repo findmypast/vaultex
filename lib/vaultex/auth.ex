@@ -3,10 +3,7 @@ defmodule Vaultex.Auth do
   # the config files in Vaultex appear to be ignored.
   @httpoison Application.get_env(:vaultex, :httpoison) || HTTPoison
 
-  def handle(state) do
-    app_id = Application.get_env(:vaultex, :app_id, nil)
-    user_id = Application.get_env(:vaultex, :user_id, nil)
-
+  def handle({app_id, user_id}, state) do
     request(:post, "#{state.url}auth/app-id/login", %{app_id: app_id, user_id: user_id}, [{"Content-Type", "application/json"}])
     |> handle_response(state)
   end

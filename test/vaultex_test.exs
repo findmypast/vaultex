@@ -3,40 +3,31 @@ defmodule VaultexTest do
   doctest Vaultex
 
   test "Authentication of app_id and user_id is successful" do
-    Application.put_env(:vaultex, :app_id, "good")
-    assert Vaultex.Client.auth == {:ok, :authenticated}
+    assert Vaultex.Client.auth({"good", "whatever"}) == {:ok, :authenticated}
   end
 
   test "Authentication of app_id and user_id is unsuccessful" do
-    Application.put_env(:vaultex, :app_id, "bad")
-    assert Vaultex.Client.auth == {:error, ["Not Authenticated"]}
+    assert Vaultex.Client.auth({"bad", "whatever"}) == {:error, ["Not Authenticated"]}
   end
 
   test "Authentication of app_id and user_id causes an exception" do
-    Application.put_env(:vaultex, :app_id, "boom")
-    assert Vaultex.Client.auth == {:error, ["Bad response from vault", "econnrefused"]}
+    assert Vaultex.Client.auth({"boom", "whatever"}) == {:error, ["Bad response from vault", "econnrefused"]}
   end
 
   test "Read of valid secret key returns the correct value" do
-    Application.put_env(:vaultex, :app_id, "good")
-    Vaultex.Client.auth()
-    assert Vaultex.Client.read("secret/foo") == {:ok, "bar"}
+    assert Vaultex.Client.read("secret/foo", {"good", "whatever"}) == {:ok, "bar"}
   end
 
   test "Read of non existing secret key returns error" do
-    Application.put_env(:vaultex, :app_id, "good")
-    Vaultex.Client.auth()
-    assert Vaultex.Client.read("secret/baz") == {:error, ["Key not found"]}
+    assert Vaultex.Client.read("secret/baz", {"good", "whatever"}) == {:error, ["Key not found"]}
   end
 
   test "Read of a secret key when not authenticated returns error" do
-    assert Vaultex.Client.read("secret/faz") == {:error, ["Not Authenticated"]}
+    assert Vaultex.Client.read("secret/faz", {"bad", "whatever"}) == {:error, ["Not Authenticated"]}
   end
 
   test "Read of a secret key causes and exception" do
-    Application.put_env(:vaultex, :app_id, "good")
-    Vaultex.Client.auth()
-    assert Vaultex.Client.read("secret/boom") == {:error, ["Bad response from vault", "econnrefused"]}
+    assert Vaultex.Client.read("secret/boom", {"good", "whatever"}) == {:error, ["Bad response from vault", "econnrefused"]}
   end
 
 end

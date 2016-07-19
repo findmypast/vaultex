@@ -19,18 +19,22 @@ defmodule Vaultex.Client do
   end
 
   @doc """
-  Authenticates with vault using :app_id and :user_id values. This must be executed before attempting to read secrets from vault.
+  Authenticates with vault using an {app_id, user_id} tuple. This must be executed before attempting to read secrets from vault.
+
+  ## Parameters
+  
+    - credentials: An {app_id, user_id} tuple used for authentication
 
   ## Examples
 
-    iex> Vaultex.Client.auth
+    iex> Vaultex.Client.auth({app_id, user_id})
     {:ok, :authenticated}
 
-    iex> Vaultex.Client.auth
+    iex> Vaultex.Client.auth({app_id, user_id})
     {:error, ["Something didn't work"]}
   """
-  def auth() do
-    GenServer.call(:vaultex, {:auth})
+  def auth(credentials = {app_id, user_id}) do
+    GenServer.call(:vaultex, {:auth, credentials})
   end
 
   @doc """
@@ -39,16 +43,27 @@ defmodule Vaultex.Client do
   ## Parameters
 
     - key: A String path to be used for querying vault.
+    - credentials: An {app_id, user_id} tuple used for authentication
 
   ## Examples
 
-    iex> Vaultex.Client.read "secret/foo"
+    iex> Vaultex.Client.read "secret/foo", {app_id, user_id}
     {:ok, "bar"}
 
-    iex> Vaultex.Client.read "secret/baz"
+    iex> Vaultex.Client.read "secret/baz", {app_id, user_id}
     {:error, ["Key not found"]}
   """
-  def read(key) do
+  def read(key, credentials) do
+    response = read(key)
+    case response do
+      {:ok, _} -> response
+      {:error, _} ->
+        auth(credentials)
+        read(key)
+    end
+  end
+
+  defp read(key) do
     GenServer.call(:vaultex, {:read, key})
   end
 
@@ -56,8 +71,8 @@ defmodule Vaultex.Client do
     Read.handle(key, state)
   end
 
-  def handle_call({:auth}, _from, state) do
-    Auth.handle(state)
+  def handle_call({:auth, credentials}, _from, state) do
+    Auth.handle(credentials, state)
   end
 
   defp get_env(:host) do
