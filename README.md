@@ -22,13 +22,6 @@ end
 ```
 ## Configuration
 
-In your `config.exs` file add:
-
-```elixir
-config :vaultex, app_id: System.get_env("VAULT_APP_ID")
-config :vaultex, user_id: System.get_env("VAULT_USER_ID")
-```
-
 The vault endpoint can be specified with environment variables:
 
 * `VAULT_HOST`
@@ -46,18 +39,9 @@ These default to `localhost`, `8200`, `http` respectively.
 
 ## Usage
 
-The library requires to authenticate first with:
-
-```elixir
-alias Vaultex.Client, as: Vault
-...
-
-Vault.auth #returns {:ok, :authenticated}
-```
-
-After successful authentication, you can read a secret with:
+To read a secret you must provide both an app id and a user id with the read calls
 
 ```elixir
 ...
-Vault.read("secret/foo") #returns {:ok, "bar"}
+Vault.read("secret/foo", {app_id, user_id}) #returns {:ok, "bar"}
 ```
