@@ -22,19 +22,20 @@ defmodule Vaultex.Client do
   Authenticates with vault using an {app_id, user_id} tuple. This must be executed before attempting to read secrets from vault.
 
   ## Parameters
-  
+
+    - method: Auth backend to use for authenticating, can be one of [:app_id, :userpass]
     - credentials: An {app_id, user_id} tuple used for authentication
 
   ## Examples
 
-    iex> Vaultex.Client.auth({app_id, user_id})
+    iex> Vaultex.Client.auth(:app_id, {app_id, user_id})
     {:ok, :authenticated}
 
-    iex> Vaultex.Client.auth({app_id, user_id})
+    iex> Vaultex.Client.auth(:userpass, {username, password})
     {:error, ["Something didn't work"]}
   """
-  def auth(credentials = {app_id, user_id}) do
-    GenServer.call(:vaultex, {:auth, credentials})
+  def auth(method, credentials) do
+    GenServer.call(:vaultex, {:auth, method, credentials})
   end
 
   @doc """
@@ -43,22 +44,23 @@ defmodule Vaultex.Client do
   ## Parameters
 
     - key: A String path to be used for querying vault.
+    - auth_method: Auth backend to use for authenticating, can be one of [:app_id, :userpass]
     - credentials: An {app_id, user_id} tuple used for authentication
 
   ## Examples
 
-    iex> Vaultex.Client.read "secret/foo", {app_id, user_id}
+    iex> Vaultex.Client.read "secret/foo", :app_id, {app_id, user_id}
     {:ok, "bar"}
 
-    iex> Vaultex.Client.read "secret/baz", {app_id, user_id}
+    iex> Vaultex.Client.read "secret/baz", :userpass, {username, password}
     {:error, ["Key not found"]}
   """
-  def read(key, credentials) do
+  def read(key, auth_method, credentials) do
     response = read(key)
     case response do
       {:ok, _} -> response
       {:error, _} ->
-        auth(credentials)
+        auth(auth_method, credentials)
         read(key)
     end
   end
@@ -71,8 +73,8 @@ defmodule Vaultex.Client do
     Read.handle(key, state)
   end
 
-  def handle_call({:auth, credentials}, _from, state) do
-    Auth.handle(credentials, state)
+  def handle_call({:auth, method, credentials}, _from, state) do
+    Auth.handle(method, credentials, state)
   end
 
   defp get_env(:host) do

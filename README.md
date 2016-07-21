@@ -39,9 +39,9 @@ These default to `localhost`, `8200`, `http` respectively.
 
 ## Usage
 
-To read a secret you must provide both an app id and a user id with the read calls
+To read a secret you must provide the path to the secret and the authentication backend and credentials you will use to login. See the Vaultex.Client.auth/2 docs for supported auth backends.
 
 ```elixir
 ...
-Vault.read("secret/foo", {app_id, user_id}) #returns {:ok, "bar"}
+Vault.read("secret/foo", :userpass, {username, password}) #returns {:ok, "bar"}
 ```
