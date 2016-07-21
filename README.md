@@ -1,6 +1,6 @@
 # Vaultex
 
-A very simple read only elixir client that authenticates and reads secrets from HashiCorop's Vault.
+A very simple read-only elixir client that authenticates and reads secrets from HashiCorp's Vault.
 
 ## Installation
 
