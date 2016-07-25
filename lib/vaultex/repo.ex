@@ -18,9 +18,17 @@ defmodule Vaultex.Repo do
         Ecto.Repo.Supervisor.config(__MODULE__, @otp_app, [])
       end
 
-      def start_link({password_path, auth_method, credentials}, opts \\ []) do
-        password = Vaultex.Client.read(password_path, auth_method, credentials)
+      def start_link(opts) do
+        password = get_password opts[:password]
         Ecto.Repo.Supervisor.start_link(__MODULE__, @otp_app, @adapter, Keyword.put(opts, :password, password))
+      end
+
+      defp get_password({ path, auth_method, credentials }) do
+        Vaultex.Client.read(path, auth_method, credentials)
+      end
+
+      defp get_password(password) do
+        password
       end
 
       def stop(pid, timeout \\ 5000) do
