@@ -50,7 +50,7 @@ defmodule Vaultex.Client do
   ## Examples
 
     iex> Vaultex.Client.read "secret/foo", :app_id, {app_id, user_id}
-    {:ok, "bar"}
+    {:ok, %{"value" => bar"}}
 
     iex> Vaultex.Client.read "secret/baz", :userpass, {username, password}
     {:error, ["Key not found"]}

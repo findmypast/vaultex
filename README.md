@@ -43,5 +43,5 @@ To read a secret you must provide the path to the secret and the authentication 
 
 ```elixir
 ...
-Vault.read("secret/foo", :userpass, {username, password}) #returns {:ok, "bar"}
+Vault.read("secret/foo", :userpass, {username, password}) #returns {:ok, %{"value" => bar"}}
 ```
