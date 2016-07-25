@@ -14,7 +14,7 @@ defmodule Vaultex.Read do
 
   defp handle_response({:ok, response}, state) do
     case response.body |> Poison.Parser.parse! do
-      %{"data" => data} -> {:reply, {:ok, data["value"]}, state}
+      %{"data" => data} -> {:reply, {:ok, data}, state}
       %{"errors" => []} -> {:reply, {:error, ["Key not found"]}, state}
       %{"errors" => messages} -> {:reply, {:error, messages}, state}
     end
