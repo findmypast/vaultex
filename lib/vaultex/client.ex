@@ -60,8 +60,8 @@ defmodule Vaultex.Client do
     case response do
       {:ok, _} -> response
       {:error, _} ->
-        auth(auth_method, credentials)
-        read(key)
+        with {:ok, _} <- auth(auth_method, credentials),
+          do: read(key)
     end
   end
 
