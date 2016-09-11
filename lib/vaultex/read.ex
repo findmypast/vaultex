@@ -1,8 +1,4 @@
 defmodule Vaultex.Read do
-  # Is there a better way to get the default HTTPoison value? When this library is consumed by a Client
-  # the config files in Vaultex appear to be ignored.
-  @httpoison Application.get_env(:vaultex, :httpoison) || HTTPoison
-
   def handle(key, state = %{token: token}) do
     request(:get, "#{state.url}#{key}", %{}, [{"X-Vault-Token", token}])
     |> handle_response(state)
@@ -11,6 +7,7 @@ defmodule Vaultex.Read do
   def handle(_key, state = %{}) do
     {:reply, {:error, ["Not Authenticated"]}, state}
   end
+
 
   defp handle_response({:ok, response}, state) do
     case response.body |> Poison.Parser.parse! do
@@ -25,6 +22,6 @@ defmodule Vaultex.Read do
   end
 
   defp request(method, url, params = %{}, headers) do
-    @httpoison.request(method, url, Poison.Encoder.encode(params, []), headers)
+    Vaultex.RedirectableRequests.request(method, url, params, headers)
   end
 end
