@@ -33,6 +33,9 @@ defmodule Vaultex.Client do
 
     iex> Vaultex.Client.auth(:userpass, {username, password})
     {:error, ["Something didn't work"]}
+
+    iex> Vaultex.Client.auth :github, {github_token}
+    {:ok, :authenticated}
   """
   def auth(method, credentials) do
     GenServer.call(:vaultex, {:auth, method, credentials})
@@ -54,6 +57,10 @@ defmodule Vaultex.Client do
 
     iex> Vaultex.Client.read "secret/baz", :userpass, {username, password}
     {:error, ["Key not found"]}
+
+    iex> Vaultex.Client.read "secret/bar", :github, {github_token}
+    {:ok, %{"value" => "bear"}}
+
   """
   def read(key, auth_method, credentials) do
     response = read(key)
