@@ -1,7 +1,6 @@
 defmodule Vaultex.Client do
   @moduledoc """
   Provides a functionality to authenticate and read from a vault endpoint.
-  The communication relies on :app_id and :user_id variables being set.
   """
 
   use GenServer
@@ -23,8 +22,8 @@ defmodule Vaultex.Client do
 
   ## Parameters
 
-    - method: Auth backend to use for authenticating, can be one of [:app_id, :userpass]
-    - credentials: An {app_id, user_id} tuple used for authentication
+    - method: Auth backend to use for authenticating, can be one of `:app_id, :userpass, :github`
+    - credentials: A tuple used for authentication depending on the method, `{app_id, user_id}` for `:app_id`, `{username, password}` for `:userpass`, `{github_token}` for `:github`
 
   ## Examples
 
@@ -49,8 +48,7 @@ defmodule Vaultex.Client do
   ## Parameters
 
     - key: A String path to be used for querying vault.
-    - auth_method: Auth backend to use for authenticating, can be one of [:app_id, :userpass]
-    - credentials: An {app_id, user_id} tuple used for authentication
+    - auth_method and credentials: See Vaultex.Client.auth
 
   ## Examples
 
