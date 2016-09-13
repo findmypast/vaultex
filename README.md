@@ -1,5 +1,8 @@
 # Vaultex
 
+[![Hex.pm](https://img.shields.io/hexpm/v/vaultex.svg)]()
+[![Hex.pm](https://img.shields.io/hexpm/dt/vaultex.svg)]()
+
 A very simple read-only elixir client that authenticates and reads secrets from HashiCorp's Vault.
 
 ## Installation
@@ -10,7 +13,7 @@ The package can be installed as:
 
 ```elixir
 def deps do
-  [{:vaultex, "~> 0.0.1"}]
+  [{:vaultex, "~> 0.2.1"}]
 end
 ```
   2. Ensure vaultex is started before your application:
@@ -39,7 +42,7 @@ These default to `localhost`, `8200`, `http` respectively.
 
 ## Usage
 
-To read a secret you must provide the path to the secret and the authentication backend and credentials you will use to login. See the Vaultex.Client.auth/2 docs for supported auth backends.
+To read a secret you must provide the path to the secret and the authentication backend and credentials you will use to login. See the [Vaultex.Client.auth/2](https://hexdocs.pm/vaultex/Vaultex.Client.html#auth/2) docs for supported auth backends.
 
 ```elixir
 ...
