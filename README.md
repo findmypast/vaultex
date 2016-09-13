@@ -42,7 +42,7 @@ These default to `localhost`, `8200`, `http` respectively.
 
 ## Usage
 
-To read a secret you must provide the path to the secret and the authentication backend and credentials you will use to login. See the Vaultex.Client.auth/2 docs for supported auth backends.
+To read a secret you must provide the path to the secret and the authentication backend and credentials you will use to login. See the [Vaultex.Client.auth/2](https://hexdocs.pm/vaultex/Vaultex.Client.html#auth/2) docs for supported auth backends.
 
 ```elixir
 ...
