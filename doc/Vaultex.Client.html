@@ -69,8 +69,7 @@
 
       
         <section id="moduledoc">
-          <p>Provides a functionality to authenticate and read from a vault endpoint.
-The communication relies on :app_id and :user_id variables being set.</p>
+          <p>Provides a functionality to authenticate and read from a vault endpoint.</p>
 
         </section>
       
@@ -153,9 +152,9 @@ The communication relies on :app_id and :user_id variables being set.</p>
 </h2>
 
 <ul>
-<li>method: Auth backend to use for authenticating, can be one of [:app_id, :userpass]
+<li>method: Auth backend to use for authenticating, can be one of <code class="inline">:app_id, :userpass, :github</code>
 </li>
-<li>credentials: An {app_id, user_id} tuple used for authentication
+<li>credentials: A tuple used for authentication depending on the method, <code class="inline">{app_id, user_id}</code> for <code class="inline">:app_id</code>, <code class="inline">{username, password}</code> for <code class="inline">:userpass</code>, <code class="inline">{github_token}</code> for <code class="inline">:github</code>
 </li>
 </ul>
 <h2 id="auth/2-examples" class="section-heading">
@@ -194,9 +193,7 @@ The communication relies on :app_id and :user_id variables being set.</p>
 <ul>
 <li>key: A String path to be used for querying vault.
 </li>
-<li>auth_method: Auth backend to use for authenticating, can be one of [:app_id, :userpass]
-</li>
-<li>credentials: An {app_id, user_id} tuple used for authentication
+<li>auth_method and credentials: See Vaultex.Client.auth
 </li>
 </ul>
 <h2 id="read/3-examples" class="section-heading">

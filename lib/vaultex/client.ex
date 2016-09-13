@@ -54,13 +54,13 @@ defmodule Vaultex.Client do
 
     ```
     iex> Vaultex.Client.read "secret/foo", :app_id, {app_id, user_id}
-    {:ok, %{"value" => bar"}}
+    {:ok, %{"value" => "bar"}}
 
     iex> Vaultex.Client.read "secret/baz", :userpass, {username, password}
     {:error, ["Key not found"]}
 
     iex> Vaultex.Client.read "secret/bar", :github, {github_token}
-    {:ok, %{"value" => "bear"}}
+    {:ok, %{"value" => "bar"}}
     ```
 
   """
