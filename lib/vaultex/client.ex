@@ -34,7 +34,7 @@ defmodule Vaultex.Client do
     iex> Vaultex.Client.auth(:userpass, {username, password})
     {:error, ["Something didn't work"]}
 
-    iex> Vaultex.Client.auth :github, {github_token}
+    iex> Vaultex.Client.auth(:github, {github_token})
     {:ok, :authenticated}
   """
   def auth(method, credentials) do
