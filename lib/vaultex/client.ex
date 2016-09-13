@@ -28,6 +28,7 @@ defmodule Vaultex.Client do
 
   ## Examples
 
+    ```
     iex> Vaultex.Client.auth(:app_id, {app_id, user_id})
     {:ok, :authenticated}
 
@@ -36,6 +37,7 @@ defmodule Vaultex.Client do
 
     iex> Vaultex.Client.auth(:github, {github_token})
     {:ok, :authenticated}
+    ```
   """
   def auth(method, credentials) do
     GenServer.call(:vaultex, {:auth, method, credentials})
@@ -52,6 +54,7 @@ defmodule Vaultex.Client do
 
   ## Examples
 
+    ```
     iex> Vaultex.Client.read "secret/foo", :app_id, {app_id, user_id}
     {:ok, %{"value" => bar"}}
 
@@ -60,6 +63,7 @@ defmodule Vaultex.Client do
 
     iex> Vaultex.Client.read "secret/bar", :github, {github_token}
     {:ok, %{"value" => "bear"}}
+    ```
 
   """
   def read(key, auth_method, credentials) do
