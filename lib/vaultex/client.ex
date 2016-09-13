@@ -18,7 +18,7 @@ defmodule Vaultex.Client do
   end
 
   @doc """
-  Authenticates with vault using an {app_id, user_id} tuple. This must be executed before attempting to read secrets from vault.
+  Authenticates with vault using a tuple. This can be executed before attempting to read secrets from vault.
 
   ## Parameters
 
