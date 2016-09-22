@@ -13,7 +13,7 @@ defmodule Vaultex.Client do
   end
 
   def init(state) do
-    url = "#{get_env(:scheme)}://#{get_env(:host)}:#{get_env(:port)}/#{@version}/"
+    url = "#{scheme}://#{host}:#{port}/#{@version}/"
     {:ok, Map.merge(state, %{url: url})}
   end
 
@@ -86,6 +86,22 @@ defmodule Vaultex.Client do
     Auth.handle(method, credentials, state)
   end
 
+  defp host do
+    parsed_vault_addr.host || get_env(:host)
+  end
+
+  defp port do
+    parsed_vault_addr.port || get_env(:port)
+  end
+
+  defp scheme do
+    parsed_vault_addr.scheme || get_env(:scheme)
+  end
+
+  defp parsed_vault_addr do
+    get_env(:vault_addr) |> to_string |> URI.parse
+  end
+
   defp get_env(:host) do
     System.get_env("VAULT_HOST") || Application.get_env(:vaultex, :host) || "localhost"
   end
@@ -96,5 +112,9 @@ defmodule Vaultex.Client do
 
   defp get_env(:scheme) do
       System.get_env("VAULT_SCHEME") || Application.get_env(:vaultex, :scheme) || "http"
+  end
+
+  defp get_env(:vault_addr) do
+    System.get_env("VAULT_ADDR") || Application.get_env(:vaultex, :vault_addr)
   end
 end
