@@ -31,10 +31,19 @@ defmodule Vaultex.Client do
     iex> Vaultex.Client.auth(:app_id, {app_id, user_id})
     {:ok, :authenticated}
 
+    iex> Vaultex.Client.auth(:app_id, {app_id, [user_id_path: user_id_path])
+    {:ok, :authenticated}
+
     iex> Vaultex.Client.auth(:userpass, {username, password})
     {:error, ["Something didn't work"]}
 
+    iex> Vaultex.Client.auth(:userpass, {username, [password_path: password_path]})
+    {:ok, :authenticated}
+
     iex> Vaultex.Client.auth(:github, {github_token})
+    {:ok, :authenticated}
+
+    iex> Vaultex.Client.auth(:github, github_token_path: github_token_path)
     {:ok, :authenticated}
     ```
   """
@@ -56,10 +65,22 @@ defmodule Vaultex.Client do
     iex> Vaultex.Client.read "secret/foo", :app_id, {app_id, user_id}
     {:ok, %{"value" => "bar"}}
 
+    iex> Vaultex.Client.read "secret/foo", :app_id, {app_id, [user_id_path: user_id]}
+    {:ok, %{"value" => "bar"}}
+
     iex> Vaultex.Client.read "secret/baz", :userpass, {username, password}
     {:error, ["Key not found"]}
 
+    iex> Vaultex.Client.read "secret/baz", :userpass, {username, password}
+    {:ok, %{"value" => "bar"}}
+
+    iex> Vaultex.Client.read "secret/baz", :userpass, {username, [password_path: password_path]}
+    {:ok, %{"value" => "bar"}}
+
     iex> Vaultex.Client.read "secret/bar", :github, {github_token}
+    {:ok, %{"value" => "bar"}}
+
+    iex> Vaultex.Client.read "secret/bar", :github, github_token_path: github_token_path
     {:ok, %{"value" => "bar"}}
     ```
 
