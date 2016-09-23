@@ -1,4 +1,4 @@
-# Vaultex
+# :lock: Vaultex
 
 [![Hex.pm](https://img.shields.io/hexpm/v/vaultex.svg)]()
 [![Hex.pm](https://img.shields.io/hexpm/dt/vaultex.svg)]()
@@ -38,6 +38,17 @@ Or application variables:
 * `:vaultex, :scheme`
 
 These default to `localhost`, `8200`, `http` respectively.
+
+:new: :newspaper:
+As an alternative to the above, you can configure your vault endpoint with a single environment variable:
+
+* `VAULT_ADDR`
+
+Or a single application variable:
+
+* `:vaultex, :vault_addr`
+
+An example value for VAULT_ADDR is http://127.0.0.1:8200  
 
 
 ## Usage
