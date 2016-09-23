@@ -25,7 +25,17 @@ end
 ```
 ## Configuration
 
-The vault endpoint can be specified with environment variables:
+You can configure your vault endpoint with a single environment variable:
+
+* `VAULT_ADDR`
+
+Or a single application variable:
+
+* `:vaultex, :vault_addr`
+
+An example value for `VAULT_ADDR` is `http://127.0.0.1:8200`.
+
+Alternatively the vault endpoint can be specified with environment variables:
 
 * `VAULT_HOST`
 * `VAULT_PORT`
@@ -38,18 +48,6 @@ Or application variables:
 * `:vaultex, :scheme`
 
 These default to `localhost`, `8200`, `http` respectively.
-
-:new: :newspaper:
-As an alternative to the above, you can configure your vault endpoint with a single environment variable:
-
-* `VAULT_ADDR`
-
-Or a single application variable:
-
-* `:vaultex, :vault_addr`
-
-An example value for VAULT_ADDR is http://127.0.0.1:8200  
-
 
 ## Usage
 
