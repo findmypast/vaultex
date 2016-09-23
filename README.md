@@ -48,7 +48,13 @@ To read a secret you must provide the path to the secret and the authentication 
 ...
 iex> Vaultex.Client.auth(:app_id, {app_id, user_id})
 
+iex> Vaultex.Client.auth(:app_id, {app_id, [user_id_path: user_id_path]})
+
 iex> Vaultex.Client.auth(:userpass, {username, password})
 
-iex> Vaultex.Client.auth(:github, {github_token}) #returns {:ok, %{"value" => bar"}}
+iex> Vaultex.Client.auth(:userpass, {username, [password_path: password]})
+
+iex> Vaultex.Client.auth(:github, {github_token})
+
+iex> Vaultex.Client.auth(:github, github_token_path: github_token_path)
 ```

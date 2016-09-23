@@ -6,6 +6,10 @@ defmodule VaultexTest do
     assert Vaultex.Client.auth(:app_id, {"good", "whatever"}) == {:ok, :authenticated}
   end
 
+  test "Authentication of app_id and user_id_path is successful" do
+    assert Vaultex.Client.auth(:app_id, {"good_user_id_path", [user_id_path: "test/files/test_user_id"]}) == {:ok, :authenticated}
+  end
+
   test "Authentication of app_id and user_id is unsuccessful" do
     assert Vaultex.Client.auth(:app_id, {"bad", "whatever"}) == {:error, ["Not Authenticated"]}
   end
@@ -22,6 +26,10 @@ defmodule VaultexTest do
     assert Vaultex.Client.auth(:userpass, {"user", "good"}) == {:ok, :authenticated}
   end
 
+  test "Authentication of userpass using password_path is successful" do
+    assert Vaultex.Client.auth(:userpass, {"user", [password_path: "test/files/test_password"]}) == {:ok, :authenticated}
+  end
+
   test "Authentication of userpass requiring redirects is successful" do
     assert Vaultex.Client.auth(:userpass, {"user", "redirects_good"}) == {:ok, :authenticated}
   end
@@ -36,6 +44,10 @@ defmodule VaultexTest do
 
   test "Authentication of github_token is successful" do
     assert Vaultex.Client.auth(:github, {"good"}) == {:ok, :authenticated}
+  end
+
+  test "Authentication of github_token using path is successful" do
+    assert Vaultex.Client.auth(:github, github_token_path: "test/files/test_github_token" ) == {:ok, :authenticated}
   end
 
   test "Authentication of github_token is unsuccessful" do
