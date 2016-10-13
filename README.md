@@ -13,7 +13,7 @@ The package can be installed as:
 
 ```elixir
 def deps do
-  [{:vaultex, "~> 0.2.2"}]
+  [{:vaultex, "~> 0.2.3"}]
 end
 ```
   2. Ensure vaultex is started before your application:

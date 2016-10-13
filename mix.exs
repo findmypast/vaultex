@@ -3,7 +3,7 @@ defmodule Vaultex.Mixfile do
 
   def project do
     [app: :vaultex,
-     version: "0.2.2",
+     version: "0.2.3",
      elixir: "~> 1.2",
      build_embedded: Mix.env == :prod,
      start_permanent: Mix.env == :prod,
@@ -37,7 +37,7 @@ defmodule Vaultex.Mixfile do
 
   defp description do
     """
-    A very simple read only client that authenticates and reads secrets from HashiCorop's Vault.
+    A very simple read only client that authenticates and reads secrets from HashiCorp's Vault.
     """
   end
 

@@ -1,3 +1,9 @@
+/home/donald/work/vaultex/doc/dist/app-091c05798a.css
+/home/donald/work/vaultex/doc/dist/app-574613960f.js
+/home/donald/work/vaultex/doc/fonts/icomoon.eot
+/home/donald/work/vaultex/doc/fonts/icomoon.svg
+/home/donald/work/vaultex/doc/fonts/icomoon.ttf
+/home/donald/work/vaultex/doc/fonts/icomoon.woff
 index.html
 api-reference.html
 404.html
@@ -8,9 +14,3 @@ Vaultex.Client.html
 Vaultex.Read.html
 Vaultex.RedirectableRequests.html
 Vaultex.Test.TestDoubles.MockHTTPoison.html
-dist/app-7e84850c37.css
-dist/app-95540a96e6.js
-fonts/icomoon.eot
-fonts/icomoon.svg
-fonts/icomoon.ttf
-fonts/icomoon.woff
