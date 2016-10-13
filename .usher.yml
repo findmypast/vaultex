@@ -1,114 +1,22 @@
 vars:
-  registry: docker-registry.dun.fh            # Our private Docker image registry
   service_name: vaultex
-  docker_environment: &DOCKER_ENV             # The configuration for docker to deploy remote
-    - DOCKER_TLS_VERIFY=1
-    - DOCKER_HOST=tcp://<%=service_node%>.dun.fh:2376
-    - &IMAGE IMAGE=<%=registry%>/findmypast/<%=service_name%>-<%=mix_env%>:<%=version%>
-    - MIX_ENV=<%=mix_env%>
+  image: docker-registry.dun.fh/findmypast/<%=service_name%>:<%=version%>
 
 tasks:
   build:
-    - cmd: docker build --force-rm --build-arg MIX_ENV=<%=mix_env%> -t <%=registry%>/findmypast/<%=service_name%>-<%=mix_env%>:<%=version%> .
+    - cmd: docker build --force-rm --build-arg MIX_ENV=<%=mix_env%> -t <%=image%> .
 
   push:
-    - cmd: docker push <%=registry%>/findmypast/<%=service_name%>-<%=mix_env%>:<%=version%>
-
-  pull:
-    - cmd: docker pull <%=registry%>/findmypast/<%=service_name%>-<%=mix_env%>:<%=version%>
-
-  pull_all:
-    - task: pull
-      vars:
-        mix_env: integration
-    - task: pull
-      vars:
-        mix_env: prod
-
-  build_all:
-    - task: build
-      vars:
-        mix_env: integration
-    - task: build
-      vars:
-        mix_env: prod
-
-  push_all:
-    - task: push
-      vars:
-        mix_env: integration
-    - task: push
-      vars:
-        mix_env: prod
+    - cmd: docker push <%=image%>
 
   # Run unit tests inside a container
   test:
-    - cmd: sh nuke_postgres.sh
     - cmd: docker-compose -f docker-compose/test.yml build test
     - cmd: docker-compose -f docker-compose/test.yml run test
-    - cmd: sh nuke_postgres.sh
 
-  # Run container locally
-  dev:
-    - cmd: docker-compose -f docker-compose/dev.yml up --build dev
-
-  # Deploy build_config container to remote host (with blue/green)
-  deploy:
-    # Pull newest container
-    - cmd: docker pull <%=registry%>/findmypast/<%=service_name%>-<%=mix_env%>:<%=version%>
-      environment: *DOCKER_ENV
-    # Query for existing containers of that colour (if any)
-    - cmd: ahab <%=consul_host%> <%=service_node%> <%=service_name%> <%=service_tag%>
-      register: running_containers
-    # Remove those containers (if any)
-    - cmd: docker rm -fv <%=running_containers%>
-      ignore_errors: true
-      environment: *DOCKER_ENV
-    # Run container (for correct colour tag) on host
-    - cmd: docker-compose -f docker-compose/production.yml up -d
-      environment: *DOCKER_ENV
-
-  deploy_integration:
-    # Get the service tag for the offline colour
-    - cmd: twoface peek -H <%=consul_host%>:<%=consul_port%> -k proxied-services/<%=service_name%>/subdomains/integration -b blue-integration -g green-integration
-      register: service_tag
-    - task: deploy
-      vars:
-        build_config: integration
-        service_node: fh1-cst01
-        db_host: fh1-csdbt01
-        db: customer_services
-        mix_env: integration
-    # Run smoke tests against the container to confirm it's online
-    - cmd: wget http://<%=service_tag%>.<%=service_name%>.proxy.fh/api/health --retry-connrefused --tries=10 --spider
-      retry:
-        attempts: 10
-        delay: 15
-    # Flip offline/online colours by switching the consul tag
-    - cmd: twoface flip -H <%=consul_host%>:<%=consul_port%> -k proxied-services/<%=service_name%>/subdomains/integration -b blue-integration -g green-integration
-
-  deploy_production:
-    # Get the service tag for the offline colour
-    - cmd: twoface peek -H <%=consul_host%>:<%=consul_port%> -k proxied-services/<%=service_name%>/root-tag -b blue-production -g green-production
-      register: service_tag
-    - task: deploy
-      vars:
-        build_config: production
-        service_node: fh1-cs01
-        db_host: fh1-csdb01
-        db: customer_services
-        mix_env: prod
-    - task: deploy
-      vars:
-        build_config: production
-        service_node: fh1-cs02
-        db_host: fh1-csdb01
-        db: customer_services
-        mix_env: prod
-    # Run smoke tests against the container to confirm it's online
-    - cmd: wget http://<%=service_tag%>.<%=service_name%>.proxy.fh/api/health --retry-connrefused --tries 10 --spider
-      retry:
-        attempts: 10
-        delay: 15
-    # Flip offline/online colours by switching the consul tag
-    - cmd: twoface flip -H <%=consul_host%>:<%=consul_port%> -k proxied-services/<%=service_name%>/root-tag -b blue-production -g green-production
+  # Publish to Hex Repository
+  publish:
+    - cmd: docker run -e HEX_USER -e HEX_PASSWORD --name vaultex-publish --rm <%=image%> sh -c "mix hex.user auth && mix hex publish"
+      environment:
+        - HEX_USER=<%=user%>
+        - HEX_PASSWORD=<%=password%>
