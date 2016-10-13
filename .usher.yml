@@ -11,12 +11,11 @@ tasks:
 
   # Run unit tests inside a container
   test:
-    - cmd: docker-compose -f docker-compose/test.yml build test
-    - cmd: docker-compose -f docker-compose/test.yml run test
+    - cmd: docker run --name vaultex-test-runner --rm <%=registry%>/findmypast/<%=service_name%>:<%=version%> mix test
 
   # Publish to Hex Repository
   publish:
-    - cmd: docker run -e HEX_USER -e HEX_PASSWORD --name vaultex-publish --rm <%=registry%>/findmypast/<%=service_name%>:<%=version%> sh -c "mix hex.user auth && mix hex publish"
+    - cmd: docker run -e HEX_USER -e HEX_PASSWORD --name vaultex-publisher --rm <%=registry%>/findmypast/<%=service_name%>:<%=version%> sh -c "mix hex.user auth && mix hex publish"
       environment:
         - HEX_USER=<%=user%>
         - HEX_PASSWORD=<%=password%>
