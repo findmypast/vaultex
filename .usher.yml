@@ -1,13 +1,13 @@
 vars:
+  registry: docker-registry.dun.fh
   service_name: vaultex
-  image: docker-registry.dun.fh/findmypast/<%=service_name%>:<%=version%>
 
 tasks:
   build:
-    - cmd: docker build --force-rm --build-arg MIX_ENV=<%=mix_env%> -t <%=image%> .
+    - cmd: docker build --force-rm -t <%=registry%>/findmypast/<%=service_name%>:<%=version%> .
 
   push:
-    - cmd: docker push <%=image%>
+    - cmd: docker push <%=registry%>/findmypast/<%=service_name%>:<%=version%>
 
   # Run unit tests inside a container
   test:
@@ -16,7 +16,7 @@ tasks:
 
   # Publish to Hex Repository
   publish:
-    - cmd: docker run -e HEX_USER -e HEX_PASSWORD --name vaultex-publish --rm <%=image%> sh -c "mix hex.user auth && mix hex publish"
+    - cmd: docker run -e HEX_USER -e HEX_PASSWORD --name vaultex-publish --rm <%=registry%>/findmypast/<%=service_name%>:<%=version%> sh -c "mix hex.user auth && mix hex publish"
       environment:
         - HEX_USER=<%=user%>
         - HEX_PASSWORD=<%=password%>
