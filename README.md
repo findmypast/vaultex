@@ -59,5 +59,9 @@ iex> Vaultex.Client.auth(:app_id, {app_id, user_id})
 
 iex> Vaultex.Client.auth(:userpass, {username, password})
 
-iex> Vaultex.Client.auth(:github, {github_token}) #returns {:ok, %{"value" => bar"}}
+iex> Vaultex.Client.auth(:github, {github_token})
+
+...
+iex> Vaultex.Client.read "secret/bar", :github, {github_token} #returns {:ok, %{"value" => bar"}}
+
 ```
