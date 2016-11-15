@@ -3,7 +3,7 @@
 [![Hex.pm](https://img.shields.io/hexpm/v/vaultex.svg)]()
 [![Hex.pm](https://img.shields.io/hexpm/dt/vaultex.svg)]()
 
-A very simple read-only elixir client that authenticates and reads secrets from HashiCorp's Vault.
+A very simple read-only elixir client that authenticates and reads secrets from HashiCorp's Vault. As listed on [Vault Libraries](https://www.vaultproject.io/docs/http/libraries.html#elixir).
 
 ## Installation
 
