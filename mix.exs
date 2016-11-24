@@ -3,7 +3,7 @@ defmodule Vaultex.Mixfile do
 
   def project do
     [app: :vaultex,
-     version: "0.2.5",
+     version: "0.2.6",
      elixir: "~> 1.2",
      build_embedded: Mix.env == :prod,
      start_permanent: Mix.env == :prod,
@@ -31,7 +31,7 @@ defmodule Vaultex.Mixfile do
   # Type "mix help deps" for more examples and options
   defp deps do
     [{:httpoison, "~> 0.10.0"},
-    {:poison, "~> 2.0"},
+    {:poison, "~> 1.5 or ~> 2.0"},
     {:ex_doc, ">= 0.0.0", only: :dev}]
   end
 
