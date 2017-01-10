@@ -3,13 +3,13 @@ defmodule Vaultex.Mixfile do
 
   def project do
     [app: :vaultex,
-     version: "0.2.7",
+     version: "0.2.8",
      elixir: "~> 1.2",
      build_embedded: Mix.env == :prod,
      start_permanent: Mix.env == :prod,
      description: description(),
      package: package(),
-     deps: deps]
+     deps: deps()]
   end
 
   # Configuration for the OTP application

@@ -13,8 +13,7 @@ defmodule Vaultex.Client do
   end
 
   def init(state) do
-    url = "#{scheme}://#{host}:#{port}/#{@version}/"
-    {:ok, Map.merge(state, %{url: url})}
+    {:ok, Map.merge(state, %{url: url()})}
   end
 
   @doc """
@@ -86,16 +85,20 @@ defmodule Vaultex.Client do
     Auth.handle(method, credentials, state)
   end
 
+  defp url do
+    "#{scheme()}://#{host()}:#{port()}/#{@version}/"
+  end
+
   defp host do
-    parsed_vault_addr.host || get_env(:host)
+    parsed_vault_addr().host || get_env(:host)
   end
 
   defp port do
-    parsed_vault_addr.port || get_env(:port)
+    parsed_vault_addr().port || get_env(:port)
   end
 
   defp scheme do
-    parsed_vault_addr.scheme || get_env(:scheme)
+    parsed_vault_addr().scheme || get_env(:scheme)
   end
 
   defp parsed_vault_addr do
