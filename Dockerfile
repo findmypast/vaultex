@@ -10,6 +10,7 @@ RUN chmod +x /tini
 
 # Copy the dependency config over
 COPY ./mix.exs /usr/src/app/mix.exs
+COPY ./mix.lock /usr/src/app/mix.lock
 
 WORKDIR /usr/src/app
 
