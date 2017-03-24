@@ -18,7 +18,7 @@ defmodule Vaultex.Read do
   end
 
   defp handle_response({_, %HTTPoison.Error{reason: reason}}, state) do
-      {:reply, {:error, ["Bad response from vault", "#{reason}"]}, state}
+      {:reply, {:error, ["Bad response from vault [#{state.url}]", "#{reason}"]}, state}
   end
 
   defp request(method, url, params = %{}, headers) do

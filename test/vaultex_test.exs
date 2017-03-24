@@ -15,7 +15,7 @@ defmodule VaultexTest do
   end
 
   test "Authentication of app_id and user_id causes an exception" do
-    assert Vaultex.Client.auth(:app_id, {"boom", "whatever"}) == {:error, ["Bad response from vault", "econnrefused"]}
+    assert Vaultex.Client.auth(:app_id, {"boom", "whatever"}) == {:error, ["Bad response from vault [http://localhost:8200/v1/]", "econnrefused"]}
   end
 
   test "Authentication of userpass is successful" do
@@ -31,7 +31,7 @@ defmodule VaultexTest do
   end
 
   test "Authentication of userpass causes an exception" do
-    assert Vaultex.Client.auth(:userpass, {"user", "boom"}) == {:error, ["Bad response from vault", "econnrefused"]}
+    assert Vaultex.Client.auth(:userpass, {"user", "boom"}) == {:error, ["Bad response from vault [http://localhost:8200/v1/]", "econnrefused"]}
   end
 
   test "Authentication of github_token is successful" do
@@ -47,7 +47,7 @@ defmodule VaultexTest do
   end
 
   test "Authentication of github_token causes an exception" do
-    assert Vaultex.Client.auth(:github, {"boom"}) == {:error, ["Bad response from vault", "econnrefused"]}
+    assert Vaultex.Client.auth(:github, {"boom"}) == {:error, ["Bad response from vault [http://localhost:8200/v1/]", "econnrefused"]}
   end
 
   test "Read of valid secret key returns the correct value" do
@@ -67,7 +67,7 @@ defmodule VaultexTest do
   end
 
   test "Read of a secret key causes and exception" do
-    assert Vaultex.Client.read("secret/boom", :app_id, {"good", "whatever"}) == {:error, ["Bad response from vault", "econnrefused"]}
+    assert Vaultex.Client.read("secret/boom", :app_id, {"good", "whatever"}) == {:error, ["Bad response from vault [http://localhost:8200/v1/]", "econnrefused"]}
   end
 
 end
