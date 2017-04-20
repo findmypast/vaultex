@@ -106,11 +106,14 @@ defmodule Vaultex.Client do
 
   def handle_call({:auth, method, credentials}, _from, state) do
     {auth_path, credentials} = build_auth_params(method, credentials)
-
-    with {:ok, response} <- HTTPClient.request(:post, state.url <> auth_path, credentials, [{"Content-Type", "application/json"}]) do
+    url = state.url <> auth_path
+    headers = [{"Content-Type", "application/json"}]
+    with {:ok, response} <- HTTPClient.request(:post, url, credentials, headers) do
       case response.body |> Poison.Parser.parse! do
-        %{"auth" => properties} -> {:reply, {:ok, :authenticated}, Map.merge(state, %{token: properties["client_token"]})}
-        %{"errors" => messages} -> {:reply, {:error, messages}, state}
+        %{"auth" => properties} ->
+          {:reply, {:ok, :authenticated}, Map.merge(state, %{token: properties["client_token"]})}
+        %{"errors" => messages} ->
+          {:reply, {:error, messages}, state}
       end
     else
       {_, %HTTPoison.Error{reason: reason}} -> 
@@ -129,7 +132,9 @@ defmodule Vaultex.Client do
   end
 
   def handle_call({:read, key}, _from, state = %{token: token}) do
-    with {:ok, response} <- HTTPClient.request(:get, "#{state.url}#{key}", %{}, [{"X-Vault-Token", token}]) do
+    url = state.url <> key
+    headers = [{"X-Vault-Token", token}]
+    with {:ok, response} <- HTTPClient.request(:get, url, %{}, headers) do
       case response.body |> Poison.Parser.parse! do
         %{"data" => data} -> {:reply, {:ok, data}, state}
         %{"errors" => []} -> {:reply, {:error, ["Key not found"]}, state}
@@ -143,7 +148,9 @@ defmodule Vaultex.Client do
   def handle_call({:read, _}, _, state), do: {:reply, {:error, ["Not Authenticated"]}, state}
 
   def handle_call({:write, key, value}, _from, state = %{token: token}) do
-    with {:ok, response} <- HTTPClient.request(:put, "#{state.url}#{key}", value, [{"X-Vault-Token", token}]) do
+    url = state.url <> key
+    headers = [{"Content-Type", "application/json"}, {"X-Vault-Token", token}]
+    with {:ok, response} <- HTTPClient.request(:put, url, value, headers) do
       case response.status_code do
         204 -> {:reply, :ok, state}
         error_code -> {:reply, {:error, error_code}, state}
