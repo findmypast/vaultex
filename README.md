@@ -3,7 +3,7 @@
 [![Hex.pm](https://img.shields.io/hexpm/v/vaultex.svg)]()
 [![Hex.pm](https://img.shields.io/hexpm/dt/vaultex.svg)]()
 
-A very simple read-only elixir client that authenticates and reads secrets from HashiCorp's Vault. As listed on [Vault Libraries](https://www.vaultproject.io/docs/http/libraries.html#elixir).
+A very simple elixir client that authenticates and reads secrets from HashiCorp's Vault. As listed on [Vault Libraries](https://www.vaultproject.io/docs/http/libraries.html#elixir).
 
 ## Installation
 
@@ -63,5 +63,8 @@ iex> Vaultex.Client.auth(:github, {github_token})
 
 ...
 iex> Vaultex.Client.read "secret/bar", :github, {github_token} #returns {:ok, %{"value" => bar"}}
+
+...
+iex> Vaultex.Client.write "secret/foo", %{"value" => "bar"}, :app_id, {app_id, user_id}
 
 ```

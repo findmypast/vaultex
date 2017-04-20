@@ -70,4 +70,11 @@ defmodule VaultexTest do
     assert Vaultex.Client.read("secret/boom", :app_id, {"good", "whatever"}) == {:error, ["Bad response from vault [http://localhost:8200/v1/]", "econnrefused"]}
   end
 
+  test "Write of valid secret key returns :ok" do
+    assert Vaultex.Client.write("secret/foo", %{"value" => "bar"}, :app_id, {"good", "whatever"}) == :ok
+  end
+
+  test "Write of valid secret key requiring redirect returns :ok" do
+    assert Vaultex.Client.write("secret/foo/redirects", %{"value" => "bar"}, :app_id, {"good", "whatever"}) == :ok
+  end
 end
