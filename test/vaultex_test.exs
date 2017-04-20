@@ -1,6 +1,5 @@
 defmodule VaultexTest do
   use ExUnit.Case
-  doctest Vaultex
 
   test "Authentication of app_id and user_id is successful" do
     assert Vaultex.Client.auth(:app_id, {"good", "whatever"}) == {:ok, :authenticated}
@@ -68,6 +67,14 @@ defmodule VaultexTest do
 
   test "Read of a secret key causes and exception" do
     assert Vaultex.Client.read("secret/boom", :app_id, {"good", "whatever"}) == {:error, ["Bad response from vault [http://localhost:8200/v1/]", "econnrefused"]}
+  end
+
+  test "Write of valid secret key returns :ok" do
+    assert Vaultex.Client.write("secret/foo", %{"value" => "bar"}, :app_id, {"good", "whatever"}) == :ok
+  end
+
+  test "Write of valid secret key requiring redirect returns :ok" do
+    assert Vaultex.Client.write("secret/foo/redirects", %{"value" => "bar"}, :app_id, {"good", "whatever"}) == :ok
   end
 
 end
