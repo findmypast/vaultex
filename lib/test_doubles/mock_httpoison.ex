@@ -23,6 +23,14 @@ defmodule Vaultex.Test.TestDoubles.MockHTTPoison do
     end
   end
 
+  def request(:put, url, _params, _) do
+    cond do
+      String.ends_with?(url, "secret/foo") -> {:ok, %{status_code: 204, body: ""}}
+      String.ends_with?(url, "secret/foo/redirects") -> {:ok, %{status_code: 307, body: "", headers: [{"Location", "secret/foo"}]}}
+      :else -> raise "Unmatched url #{url}"
+    end
+  end
+
   defp status_code(url, stringified_params) do
     if String.contains? stringified_params, "redirect" do
       if redirected_url? url do

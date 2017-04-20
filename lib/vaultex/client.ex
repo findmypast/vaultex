@@ -6,6 +6,7 @@ defmodule Vaultex.Client do
   use GenServer
   alias Vaultex.Auth, as: Auth
   alias Vaultex.Read, as: Read
+  alias Vaultex.Write, as: Write
   @version "v1"
 
   def start_link() do
@@ -77,8 +78,42 @@ defmodule Vaultex.Client do
     GenServer.call(:vaultex, {:read, key})
   end
 
+  @doc """
+  Writes a secret to Vault given a path.
+
+  ## Parameters
+
+    - key: A String path where the secret will be written.
+    - value: A String => String map that will be stored in Vault
+    - auth_method and credentials: See Vaultex.Client.auth
+
+  ## Examples
+
+    ```
+    iex> Vaultex.Client.write "secret/foo", %{"value" => "bar"}, :app_id, {app_id, user_id}
+    :ok
+    ```
+  """
+  def write(key, value, auth_method, credentials) do
+    response = write(key, value)
+    case response do
+      :ok -> response
+      {:error, _} ->
+        with {:ok, _} <- auth(auth_method, credentials),
+          do: write(key, value)
+    end
+  end
+
+  defp write(key, value) do
+    GenServer.call(:vaultex, {:write, key, value})
+  end
+
   def handle_call({:read, key}, _from, state) do
     Read.handle(key, state)
+  end
+
+  def handle_call({:write, key, value}, _from, state) do
+    Write.handle(key, value, state)
   end
 
   def handle_call({:auth, method, credentials}, _from, state) do
