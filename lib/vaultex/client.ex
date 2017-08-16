@@ -22,8 +22,8 @@ defmodule Vaultex.Client do
 
   ## Parameters
 
-    - method: Auth backend to use for authenticating, can be one of `:app_id, :userpass, :github`
-    - credentials: A tuple used for authentication depending on the method, `{app_id, user_id}` for `:app_id`, `{username, password}` for `:userpass`, `{github_token}` for `:github`
+    - method: Auth backend to use for authenticating, can be one of `:approle, :app_id, :userpass, :github`
+    - credentials: A tuple used for authentication depending on the method, `{role_id, secret_id}` for :approle, `{app_id, user_id}` for `:app_id`, `{username, password}` for `:userpass`, `{github_token}` for `:github`
 
   ## Examples
 
