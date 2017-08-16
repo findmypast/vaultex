@@ -1,4 +1,9 @@
 defmodule Vaultex.Auth do
+  def handle(:approle, {role_id, secret_id}, state) do
+    request(:post, "#{state.url}auth/approle/login", %{role_id: role_id, secret_id: secret_id}, [{"Content-Type", "application/json"}])
+    |> handle_response(state)
+  end
+
   def handle(:app_id, {app_id, user_id}, state) do
     request(:post, "#{state.url}auth/app-id/login", %{app_id: app_id, user_id: user_id}, [{"Content-Type", "application/json"}])
     |> handle_response(state)

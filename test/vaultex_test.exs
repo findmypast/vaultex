@@ -2,6 +2,14 @@ defmodule VaultexTest do
   use ExUnit.Case
   doctest Vaultex
 
+  test "Authentication of role_id and secret_id is successful" do
+    assert Vaultex.Client.auth(:approle, {"good", "whatever"}) == {:ok, :authenticated}
+  end
+
+  test "Authentication of role_id and secret_id is unsuccessful" do
+    assert Vaultex.Client.auth(:approle, {"bad", "whatever"}) == {:error, ["Not Authenticated"]}
+  end
+
   test "Authentication of app_id and user_id is successful" do
     assert Vaultex.Client.auth(:app_id, {"good", "whatever"}) == {:ok, :authenticated}
   end
