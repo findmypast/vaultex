@@ -49,6 +49,9 @@ Or application variables:
 
 These default to `localhost`, `8200`, `http` respectively.
 
+You can skip SSL certificate verification with `:vaultex, ssl_skip_verify: true` option
+or `SSL_SKIP_VERIFY=true` environment variable.  
+
 ## Usage
 
 To read a secret you must provide the path to the secret and the authentication backend and credentials you will use to login. See the [Vaultex.Client.auth/2](https://hexdocs.pm/vaultex/Vaultex.Client.html#auth/2) docs for supported auth backends.

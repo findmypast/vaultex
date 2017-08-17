@@ -3,8 +3,10 @@ defmodule Vaultex.RedirectableRequests do
   # the config files in Vaultex appear to be ignored.
   @httpoison Application.get_env(:vaultex, :httpoison) || HTTPoison
 
-  def request(method, url, params = %{}, headers) do
-    @httpoison.request(method, url, Poison.Encoder.encode(params, []), headers)
+  def request(method, url, params = %{}, headers, options \\ []) do
+    options = if ssl_skip_verify?(), do: [{:hackney, [:insecure]} | options], else: options
+
+    @httpoison.request(method, url, Poison.Encoder.encode(params, []), headers, options)
     |> follow_redirect(method, params, headers)
   end
 
@@ -32,5 +34,9 @@ defmodule Vaultex.RedirectableRequests do
 
   defp follow_redirect({:ok, response}, _method, _params, _headers, _status_code) do
     {:ok, response}
+  end
+
+  defp ssl_skip_verify?() do
+    System.get_env("SSL_SKIP_VERIFY") || Application.get_env(:vaultex, :ssl_skip_verify) || false
   end
 end
