@@ -74,7 +74,7 @@ defmodule Vaultex.Client do
     end
   end
 
-  def read(key) do
+  defp read(key) do
     GenServer.call(:vaultex, {:read, key})
   end
 
