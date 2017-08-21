@@ -10,6 +10,12 @@ defmodule Vaultex.Write do
 
   defp handle_response({:ok, response}, state) do
     case response.status_code do
+      200 ->
+        case response.body |> Poison.Parser.parse! do
+          %{"data" => data} -> {:reply, {:ok, data}, state}
+          %{"errors" => []} -> {:reply, {:error, ["Key not found"]}, state}
+          %{"errors" => messages} -> {:reply, {:error, messages}, state}
+        end
       204 -> {:reply, :ok, state}
       error_code -> {:reply, {:error, error_code}, state}
     end

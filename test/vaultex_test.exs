@@ -85,4 +85,9 @@ defmodule VaultexTest do
   test "Write of valid secret key requiring redirect returns :ok" do
     assert Vaultex.Client.write("secret/foo/redirects", %{"value" => "bar"}, :app_id, {"good", "whatever"}) == :ok
   end
+
+  test "Write of valid secret key requiring response returns :ok and response" do
+    assert Vaultex.Client.write("secret/foo/withresponse", %{"value" => "bar"}, :app_id, {"good", "whatever"}) == {:ok, %{"value" => "bar"}}
+  end
+
 end
