@@ -1,6 +1,6 @@
 defmodule Vaultex.Test.TestDoubles.MockHTTPoison do
 
-  def request(:post, url, params, _) do
+  def request(:post, url, params, _, _) do
     stringified_params = List.to_string params
     cond do
       stringified_params |> String.contains?("good") -> {:ok, %{status_code: status_code(url, stringified_params),
@@ -11,7 +11,7 @@ defmodule Vaultex.Test.TestDoubles.MockHTTPoison do
     end
   end
 
-  def request(:get, url, _params, _) do
+  def request(:get, url, _params, _, _) do
     cond do
       url |> String.contains?("secret/foo") -> {:ok, %{status_code: status_code(url, url),
                                                       headers: [{"Location", redirect_url(url)}],
@@ -23,7 +23,7 @@ defmodule Vaultex.Test.TestDoubles.MockHTTPoison do
     end
   end
 
-  def request(:put, url, _params, _) do
+  def request(:put, url, _params, _, _) do
     cond do
       String.ends_with?(url, "secret/foo") -> {:ok, %{status_code: 204, body: ""}}
       String.ends_with?(url, "secret/foo/redirects") -> {:ok, %{status_code: 307, body: "", headers: [{"Location", "secret/foo"}]}}
