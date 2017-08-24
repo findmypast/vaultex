@@ -98,6 +98,7 @@ defmodule Vaultex.Client do
     response = write(key, value)
     case response do
       :ok -> response
+      {:ok, response} -> {:ok, response}
       {:error, _} ->
         with {:ok, _} <- auth(auth_method, credentials),
           do: write(key, value)
