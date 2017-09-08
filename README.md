@@ -1,7 +1,7 @@
 # :lock: Vaultex
 
-[![Hex.pm](https://img.shields.io/hexpm/v/vaultex.svg)]()
-[![Hex.pm](https://img.shields.io/hexpm/dt/vaultex.svg)]()
+[![Hex.pm](https://img.shields.io/hexpm/v/vaultex.svg)](https://hex.pm/packages/vaultex)
+[![Hex.pm](https://img.shields.io/hexpm/dt/vaultex.svg)](https://hex.pm/packages/vaultex)
 
 A very simple elixir client that authenticates, reads and writes secrets from HashiCorp's Vault. As listed on [Vault Libraries](https://www.vaultproject.io/api/libraries.html#elixir).
 
