@@ -1,4 +1,4 @@
-FROM elixir:1.3.2
+FROM elixir:1.5
 
 # Install tini entrypoint
 ENV TINI_VERSION v0.9.0
