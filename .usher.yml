@@ -16,8 +16,7 @@ tasks:
   # Publish to Hex Repository
   publish:
     - cmd: docker pull <%=registry%>/findmypast/<%=service_name%>:<%=version%>
-    - cmd: docker run -e HEX_USER -e HEX_API_KEY -e HEX_PASSWORD --name vaultex-publisher --rm <%=registry%>/findmypast/<%=service_name%>:<%=version%> ./publish.sh
+    - cmd: docker run -e HEX_USER -e HEX_PASSWORD --name vaultex-publisher --rm <%=registry%>/findmypast/<%=service_name%>:<%=version%> ./publish.sh
       environment:
         - HEX_USER=<%=user%>
-        - HEX_API_KEY=<%=api_key%>
         - HEX_PASSWORD=<%=password%>

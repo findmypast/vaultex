@@ -1,3 +1,4 @@
 #!/bin/sh
 
-mkdir -p /root/.hex && echo "$HEX_USER\n$HEX_API_KEY" > /root/.hex/hex.config && echo "$HEX_PASSWORD\ny" | mix hex.publish
+echo "$HEX_USER\n$HEX_PASSWORD" | mix hex.user auth
+echo "y\n$HEX_PASSWORD" | mix hex.publish
