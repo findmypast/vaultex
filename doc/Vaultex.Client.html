@@ -5,7 +5,7 @@
     <meta http-equiv="x-ua-compatible" content="ie=edge">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <meta name="generator" content="ExDoc v0.14.3">
-    <title>Vaultex.Client – vaultex v0.2.9</title>
+    <title>Vaultex.Client – vaultex v0.3.3</title>
     <link rel="stylesheet" href="dist/app-091c05798a.css" />
     
       <link rel="canonical" href="https://hexdocs.pm/vaultex/Vaultex.Client.html" />
@@ -28,7 +28,7 @@
         vaultex
       </h1>
       <h2 class="sidebar-projectVersion">
-        v0.2.9
+        v0.3.3
       </h2>
     </div>
     
@@ -60,7 +60,7 @@
 
 
       <h1>
-        <small class="visible-xs">vaultex v0.2.9</small>
+        <small class="visible-xs">vaultex v0.3.3</small>
         Vaultex.Client
         
         
@@ -112,6 +112,15 @@
   </div>
   
 </div>
+<div class="summary-row">
+  <div class="summary-signature">
+    <a href="#write/4">write(key, value, auth_method, credentials)</a>
+  </div>
+  
+    <div class="summary-synopsis"><p>Writes a secret to Vault given a path</p>
+</div>
+  
+</div>
 
   </div>
 
@@ -152,9 +161,9 @@
 </h2>
 
 <ul>
-<li>method: Auth backend to use for authenticating, can be one of <code class="inline">:app_id, :userpass, :github</code>
+<li>method: Auth backend to use for authenticating, can be one of <code class="inline">:approle, :app_id, :userpass, :github</code>
 </li>
-<li>credentials: A tuple used for authentication depending on the method, <code class="inline">{app_id, user_id}</code> for <code class="inline">:app_id</code>, <code class="inline">{username, password}</code> for <code class="inline">:userpass</code>, <code class="inline">{github_token}</code> for <code class="inline">:github</code>
+<li>credentials: A tuple used for authentication depending on the method, <code class="inline">{role_id, secret_id}</code> for :approle, <code class="inline">{app_id, user_id}</code> for <code class="inline">:app_id</code>, <code class="inline">{username, password}</code> for <code class="inline">:userpass</code>, <code class="inline">{github_token}</code> for <code class="inline">:github</code>
 </li>
 </ul>
 <h2 id="auth/2-examples" class="section-heading">
@@ -226,6 +235,42 @@
   </div>
   <section class="docstring">
     
+  </section>
+</div>
+<div class="detail" id="write/4">
+  
+  <div class="detail-header">
+    <a href="#write/4" class="detail-link" title="Link to this function">
+      <i class="icon-link"></i>
+    </a>
+    <span class="signature">write(key, value, auth_method, credentials)</span>
+    
+    
+    
+  </div>
+  <section class="docstring">
+    <p>Writes a secret to Vault given a path.</p>
+<h2 id="write/4-parameters" class="section-heading">
+  <a href="#write/4-parameters" class="hover-link"><i class="icon-link"></i></a>
+  Parameters
+</h2>
+
+<ul>
+<li>key: A String path where the secret will be written.
+</li>
+<li>value: A String =&gt; String map that will be stored in Vault
+</li>
+<li>auth_method and credentials: See Vaultex.Client.auth
+</li>
+</ul>
+<h2 id="write/4-examples" class="section-heading">
+  <a href="#write/4-examples" class="hover-link"><i class="icon-link"></i></a>
+  Examples
+</h2>
+
+<pre><code class="iex elixir">iex&gt; Vaultex.Client.write &quot;secret/foo&quot;, %{&quot;value&quot; =&gt; &quot;bar&quot;}, :app_id, {app_id, user_id}
+  :ok</code></pre>
+
   </section>
 </div>
 
