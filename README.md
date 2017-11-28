@@ -76,7 +76,7 @@ iex> Vaultex.Client.write "secret/foo", %{"value" => "bar"}, :app_id, {app_id, u
 
 ## Releasing
 
-To release you need ot bump the version and add some changes to the change log, you can do this with:
+To release you need to bump the version and add some changes to the change log, you can do this with:
 
 ```
 mix eliver.bump
