@@ -73,3 +73,11 @@ iex> Vaultex.Client.read "secret/bar", :github, {github_token} #returns {:ok, %{
 iex> Vaultex.Client.write "secret/foo", %{"value" => "bar"}, :app_id, {app_id, user_id}
 
 ```
+
+## Releasing
+
+To release you need ot bump the version and add some changes to the change log, you can do this with:
+
+```
+mix eliver.bump
+```
