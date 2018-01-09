@@ -62,6 +62,8 @@ iex> Vaultex.Client.auth(:app_id, {app_id, user_id})
 
 iex> Vaultex.Client.auth(:userpass, {username, password})
 
+iex> Vaultex.Client.auth(:ldap, {username, password})
+
 iex> Vaultex.Client.auth(:github, {github_token})
 
 iex> Vaultex.Client.auth(:approle, {role_id, secret_id})
