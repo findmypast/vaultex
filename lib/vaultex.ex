@@ -1,4 +1,7 @@
 defmodule Vaultex do
+  @moduledoc """
+  Interface with Hashicorp's vault.
+  """
   use Application
 
   # See http://elixir-lang.org/docs/stable/elixir/Application.html
