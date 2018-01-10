@@ -13,6 +13,11 @@ defmodule Vaultex.Auth do
     request(:post, "#{state.url}auth/userpass/login/#{username}", %{password: password}, [{"Content-Type", "application/json"}])
     |> handle_response(state)
   end
+  
+  def handle(:ldap, {username, password}, state) do
+    request(:post, "#{state.url}auth/ldap/login/#{username}", %{password: password}, [{"Content-Type", "application/json"}])
+    |> handle_response(state)
+  end
 
   def handle(:github, {token}, state) do
     request(:post, "#{state.url}auth/github/login", %{token: token}, [{"Content-Type", "application/json"}])

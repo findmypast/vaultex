@@ -41,6 +41,22 @@ defmodule VaultexTest do
   test "Authentication of userpass causes an exception" do
     assert Vaultex.Client.auth(:userpass, {"user", "boom"}) == {:error, ["Bad response from vault [http://localhost:8200/v1/]", "econnrefused"]}
   end
+  
+  test "Authentication of ldap is successful" do
+    assert Vaultex.Client.auth(:ldap, {"user", "good"}) == {:ok, :authenticated}
+  end
+
+  test "Authentication of ldap requiring redirects is successful" do
+    assert Vaultex.Client.auth(:ldap, {"user", "redirects_good"}) == {:ok, :authenticated}
+  end
+
+  test "Authentication of ldap is unsuccessful" do
+    assert Vaultex.Client.auth(:ldap, {"user", "bad"}) == {:error, ["Not Authenticated"]}
+  end
+
+  test "Authentication of ldap causes an exception" do
+    assert Vaultex.Client.auth(:ldap, {"user", "boom"}) == {:error, ["Bad response from vault [http://localhost:8200/v1/]", "econnrefused"]}
+  end
 
   test "Authentication of github_token is successful" do
     assert Vaultex.Client.auth(:github, {"good"}) == {:ok, :authenticated}
