@@ -154,6 +154,6 @@ defmodule Vaultex.Client do
   end
 
   defp get_env(:vault_addr) do
-    System.get_env("VAULT_ADDR") || Application.get_env(:vaultex, :vault_addr)
+    Application.get_env(:vaultex, :vault_addr) || System.get_env("VAULT_ADDR")
   end
 end
