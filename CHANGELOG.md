@@ -1,8 +1,5 @@
 # Changelog
 
-## 0.4.1
-* Fix missing VERSION file in package
-
 ## 0.4.0
 * Add support for LDAP authentication
 * Fix minor bugs in unit tests and Dockerfile
