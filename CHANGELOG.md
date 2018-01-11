@@ -1,5 +1,8 @@
 # Changelog
 
+## 0.4.2
+* Fix missing VERSION file
+
 ## 0.4.1
 * Fix missing VERSION file in package
 
