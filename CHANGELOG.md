@@ -1,5 +1,8 @@
 # Changelog
 
+## 0.5.1
+* Fixing deployment error
+
 ## 0.5.0
 * Fix missing VERSION file
 
