@@ -41,7 +41,7 @@ defmodule VaultexTest do
   test "Authentication of userpass causes an exception" do
     assert Vaultex.Client.auth(:userpass, {"user", "boom"}) == {:error, ["Bad response from vault [http://localhost:8200/v1/]", "econnrefused"]}
   end
-  
+
   test "Authentication of ldap is successful" do
     assert Vaultex.Client.auth(:ldap, {"user", "good"}) == {:ok, :authenticated}
   end
@@ -72,6 +72,10 @@ defmodule VaultexTest do
 
   test "Authentication of github_token causes an exception" do
     assert Vaultex.Client.auth(:github, {"boom"}) == {:error, ["Bad response from vault [http://localhost:8200/v1/]", "econnrefused"]}
+  end
+
+  test "Authentication of token is successful" do
+    assert Vaultex.Client.auth(:token, {"good"}) == {:ok, :authenticated}
   end
 
   test "Read of valid secret key returns the correct value" do
