@@ -68,6 +68,8 @@ iex> Vaultex.Client.auth(:github, {github_token})
 
 iex> Vaultex.Client.auth(:approle, {role_id, secret_id})
 
+iex> Vaultex.Client.auth(:token, {token})
+
 ...
 iex> Vaultex.Client.read "secret/bar", :github, {github_token} #returns {:ok, %{"value" => bar"}}
 
