@@ -25,12 +25,14 @@ defmodule Vaultex.Auth do
   end
 
   def handle(:token, {token}, state) do
-    {:reply, {:ok, :authenticated}, Map.merge(state, %{token: token})}
+    request(:get, "#{state.url}auth/token/lookup-self", %{}, [{"X-Vault-Token", token}, {"Content-Type", "application/json"}])
+    |> handle_response(state)
   end
 
   defp handle_response({:ok, response}, state) do
     case response.body |> Poison.Parser.parse! do
       %{"errors" => messages} -> {:reply, {:error, messages}, state}
+      %{"auth" => nil, "data" => data} -> {:reply, {:ok, :authenticated}, Map.merge(state, %{token: data["id"]})}
       %{"auth" => properties} -> {:reply, {:ok, :authenticated}, Map.merge(state, %{token: properties["client_token"]})}
     end
   end

@@ -2,13 +2,12 @@ defmodule Vaultex.Test.TestDoubles.MockHTTPoison do
 
   def request(:post, url, params, _, _) do
     stringified_params = List.to_string params
-    cond do
-      stringified_params |> String.contains?("good") -> {:ok, %{status_code: status_code(url, stringified_params),
-                                                          headers: [{"Location", redirect_url(url)}],
-                                                          body: Poison.Encoder.encode(%{"auth" => %{"client_token" => "mytoken"}}, [])}}
-      stringified_params |> String.contains?("boom") -> {:error, %HTTPoison.Error{id: nil, reason: :econnrefused}}
-      :else -> {:ok, %{body: Poison.Encoder.encode(%{errors: ["Not Authenticated"] }, [])}}
-    end
+    status_code = status_code(url, stringified_params)
+    vault_response(stringified_params, status_code, url)
+  end
+
+  def request(:get, url, _params, [{"X-Vault-Token", token}, {"Content-Type", "application/json"}], _opts) do
+    vault_response(token, "whatever", url)
   end
 
   def request(:get, url, _params, _, _) do
@@ -29,6 +28,16 @@ defmodule Vaultex.Test.TestDoubles.MockHTTPoison do
       String.ends_with?(url, "secret/foo") -> {:ok, %{status_code: 204, body: ""}}
       String.ends_with?(url, "secret/foo/redirects") -> {:ok, %{status_code: 307, body: "", headers: [{"Location", "secret/foo"}]}}
       :else -> raise "Unmatched url #{url}"
+    end
+  end
+
+  defp vault_response(key, status_code, url) do
+    cond do
+      key |> String.contains?("good") -> {:ok, %{status_code: status_code,
+                                                 headers: [{"Location", redirect_url(url)}],
+                                                 body: Poison.Encoder.encode(%{"auth" => %{"client_token" => "mytoken"}}, [])}}
+      key |> String.contains?("boom") -> {:error, %HTTPoison.Error{id: nil, reason: :econnrefused}}
+      :else -> {:ok, %{body: Poison.Encoder.encode(%{errors: ["Not Authenticated"] }, [])}}
     end
   end
 
