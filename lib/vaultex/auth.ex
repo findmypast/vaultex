@@ -13,7 +13,7 @@ defmodule Vaultex.Auth do
     request(:post, "#{state.url}auth/userpass/login/#{username}", %{password: password}, [{"Content-Type", "application/json"}])
     |> handle_response(state)
   end
-  
+
   def handle(:ldap, {username, password}, state) do
     request(:post, "#{state.url}auth/ldap/login/#{username}", %{password: password}, [{"Content-Type", "application/json"}])
     |> handle_response(state)
@@ -24,15 +24,21 @@ defmodule Vaultex.Auth do
     |> handle_response(state)
   end
 
+  def handle(:token, {token}, state) do
+    request(:get, "#{state.url}auth/token/lookup-self", %{}, [{"X-Vault-Token", token}, {"Content-Type", "application/json"}])
+    |> handle_response(state)
+  end
+
   defp handle_response({:ok, response}, state) do
     case response.body |> Poison.Parser.parse! do
       %{"errors" => messages} -> {:reply, {:error, messages}, state}
+      %{"auth" => nil, "data" => data} -> {:reply, {:ok, :authenticated}, Map.merge(state, %{token: data["id"]})}
       %{"auth" => properties} -> {:reply, {:ok, :authenticated}, Map.merge(state, %{token: properties["client_token"]})}
     end
   end
 
   defp handle_response({_, %HTTPoison.Error{reason: reason}}, state) do
-      {:reply, {:error, ["Bad response from vault [#{state.url}]", "#{reason}"]}, state}
+    {:reply, {:error, ["Bad response from vault [#{state.url}]", "#{reason}"]}, state}
   end
 
   defp request(method, url, params = %{}, headers) do

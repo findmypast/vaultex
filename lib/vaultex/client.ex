@@ -22,22 +22,25 @@ defmodule Vaultex.Client do
 
   ## Parameters
 
-    - method: Auth backend to use for authenticating, can be one of `:approle, :app_id, :userpass, :github`
-    - credentials: A tuple used for authentication depending on the method, `{role_id, secret_id}` for :approle, `{app_id, user_id}` for `:app_id`, `{username, password}` for `:userpass`, `{github_token}` for `:github`
+    - method: Auth backend to use for authenticating, can be one of `:approle, :app_id, :userpass, :github, :token`
+    - credentials: A tuple used for authentication depending on the method, `{role_id, secret_id}` for `:approle`, `{app_id, user_id}` for `:app_id`, `{username, password}` for `:userpass`, `{github_token}` for `:github`, `{token}` for `:token`
 
   ## Examples
 
-    ```
-    iex> Vaultex.Client.auth(:app_id, {app_id, user_id})
-    {:ok, :authenticated}
+      iex> Vaultex.Client.auth(:app_id, {app_id, user_id})
+      {:ok, :authenticated}
 
-    iex> Vaultex.Client.auth(:userpass, {username, password})
-    {:error, ["Something didn't work"]}
+      iex> Vaultex.Client.auth(:userpass, {username, password})
+      {:error, ["Something didn't work"]}
 
-    iex> Vaultex.Client.auth(:github, {github_token})
-    {:ok, :authenticated}
-    ```
+      iex> Vaultex.Client.auth(:github, {github_token})
+      {:ok, :authenticated}
   """
+  @spec auth(method :: :approle, credentials :: {role_id :: String.t, secret_id :: String.t}) :: {:ok | :error, any}
+  @spec auth(method :: :app_id, credentials :: {app_id :: String.t, user_id :: String.t}) :: {:ok | :error, any}
+  @spec auth(method :: :userpass, credentials :: {username :: String.t, password :: String.t}) :: {:ok | :error, any}
+  @spec auth(method :: :github, credentials :: {github_token :: String.t}) :: {:ok | :error, any}
+  @spec auth(method :: :token, credentials :: {token :: String.t}) :: {:ok, :authenticated}
   def auth(method, credentials) do
     GenServer.call(:vaultex, {:auth, method, credentials})
   end
@@ -52,17 +55,14 @@ defmodule Vaultex.Client do
 
   ## Examples
 
-    ```
-    iex> Vaultex.Client.read "secret/foo", :app_id, {app_id, user_id}
-    {:ok, %{"value" => "bar"}}
+      iex> Vaultex.Client.read "secret/foo", :app_id, {app_id, user_id}
+      {:ok, %{"value" => "bar"}}
 
-    iex> Vaultex.Client.read "secret/baz", :userpass, {username, password}
-    {:error, ["Key not found"]}
+      iex> Vaultex.Client.read "secret/baz", :userpass, {username, password}
+      {:error, ["Key not found"]}
 
-    iex> Vaultex.Client.read "secret/bar", :github, {github_token}
-    {:ok, %{"value" => "bar"}}
-    ```
-
+      iex> Vaultex.Client.read "secret/bar", :github, {github_token}
+      {:ok, %{"value" => "bar"}}
   """
   def read(key, auth_method, credentials) do
     response = read(key)
@@ -89,10 +89,8 @@ defmodule Vaultex.Client do
 
   ## Examples
 
-    ```
-    iex> Vaultex.Client.write "secret/foo", %{"value" => "bar"}, :app_id, {app_id, user_id}
-    :ok
-    ```
+      iex> Vaultex.Client.write "secret/foo", %{"value" => "bar"}, :app_id, {app_id, user_id}
+      :ok
   """
   def write(key, value, auth_method, credentials) do
     response = write(key, value)
