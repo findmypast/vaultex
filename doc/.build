@@ -1,13 +1,13 @@
-/home/ostasyk/Workspace/vaultex/doc/dist/app-091c05798a.css
-/home/ostasyk/Workspace/vaultex/doc/dist/app-574613960f.js
-/home/ostasyk/Workspace/vaultex/doc/fonts/icomoon.eot
-/home/ostasyk/Workspace/vaultex/doc/fonts/icomoon.svg
-/home/ostasyk/Workspace/vaultex/doc/fonts/icomoon.ttf
-/home/ostasyk/Workspace/vaultex/doc/fonts/icomoon.woff
-index.html
+dist/app-778c9ef903.js
+dist/app-c922dbe7ef.css
+fonts/icomoon.eot
+fonts/icomoon.svg
+fonts/icomoon.ttf
+fonts/icomoon.woff
+dist/sidebar_items-1461c5f95d.js
 api-reference.html
+search.html
 404.html
-dist/sidebar_items.js
 Vaultex.html
 Vaultex.Auth.html
 Vaultex.Client.html
@@ -15,3 +15,4 @@ Vaultex.Read.html
 Vaultex.RedirectableRequests.html
 Vaultex.Test.TestDoubles.MockHTTPoison.html
 Vaultex.Write.html
+index.html
