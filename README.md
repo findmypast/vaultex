@@ -13,7 +13,7 @@ The package can be installed as:
 
 ```elixir
 def deps do
-  [{:vaultex, "~> 0.3"}]
+  [{:vaultex, "~> 0.5"}]
 end
 ```
   2. Ensure vaultex is started before your application:
@@ -67,6 +67,8 @@ iex> Vaultex.Client.auth(:ldap, {username, password})
 iex> Vaultex.Client.auth(:github, {github_token})
 
 iex> Vaultex.Client.auth(:approle, {role_id, secret_id})
+
+iex> Vaultex.Client.auth(:token, {token})
 
 ...
 iex> Vaultex.Client.read "secret/bar", :github, {github_token} #returns {:ok, %{"value" => bar"}}
