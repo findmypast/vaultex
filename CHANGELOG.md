@@ -1,5 +1,9 @@
 # Changelog
 
+## 0.6.0
+* Added support for token authentication
+* Misc documentation changes
+
 ## 0.5.1
 * Fixing deployment error
 
