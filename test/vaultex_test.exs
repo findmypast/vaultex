@@ -23,7 +23,7 @@ defmodule VaultexTest do
   end
 
   test "Authentication of app_id and user_id causes an exception" do
-    assert Vaultex.Client.auth(:app_id, {"boom", "whatever"}) == {:error, ["Bad response from vault [http://localhost:8200/v1/]", "econnrefused"]}
+    assert Vaultex.Client.auth(:app_id, {"boom", "whatever"}) == {:error, ["Bad response from vault [http://localhost:8200/v1/]", :econnrefused]}
   end
 
   test "Authentication of userpass is successful" do
@@ -39,7 +39,7 @@ defmodule VaultexTest do
   end
 
   test "Authentication of userpass causes an exception" do
-    assert Vaultex.Client.auth(:userpass, {"user", "boom"}) == {:error, ["Bad response from vault [http://localhost:8200/v1/]", "econnrefused"]}
+    assert Vaultex.Client.auth(:userpass, {"user", "boom"}) == {:error, ["Bad response from vault [http://localhost:8200/v1/]", :econnrefused]}
   end
 
   test "Authentication of ldap is successful" do
@@ -55,7 +55,7 @@ defmodule VaultexTest do
   end
 
   test "Authentication of ldap causes an exception" do
-    assert Vaultex.Client.auth(:ldap, {"user", "boom"}) == {:error, ["Bad response from vault [http://localhost:8200/v1/]", "econnrefused"]}
+    assert Vaultex.Client.auth(:ldap, {"user", "boom"}) == {:error, ["Bad response from vault [http://localhost:8200/v1/]", :econnrefused]}
   end
 
   test "Authentication of github_token is successful" do
@@ -71,7 +71,7 @@ defmodule VaultexTest do
   end
 
   test "Authentication of github_token causes an exception" do
-    assert Vaultex.Client.auth(:github, {"boom"}) == {:error, ["Bad response from vault [http://localhost:8200/v1/]", "econnrefused"]}
+    assert Vaultex.Client.auth(:github, {"boom"}) == {:error, ["Bad response from vault [http://localhost:8200/v1/]", :econnrefused]}
   end
 
   test "Authentication of token is successful" do
@@ -83,7 +83,11 @@ defmodule VaultexTest do
   end
 
   test "Authentication of token causes an exception" do
-    assert Vaultex.Client.auth(:token, {"boom"}) == {:error, ["Bad response from vault [http://localhost:8200/v1/]", "econnrefused"]}
+    assert Vaultex.Client.auth(:token, {"boom"}) == {:error, ["Bad response from vault [http://localhost:8200/v1/]", :econnrefused]}
+  end
+
+  test "Authentication of self signed ssl causes an exception" do
+    assert Vaultex.Client.auth(:token, {"ssl"}) == {:error, ["Bad response from vault [http://localhost:8200/v1/]", {:tls_alert, 'unknown ca'}]}
   end
 
   test "Read of valid secret key returns the correct value" do
@@ -103,7 +107,7 @@ defmodule VaultexTest do
   end
 
   test "Read of a secret key causes and exception" do
-    assert Vaultex.Client.read("secret/boom", :app_id, {"good", "whatever"}) == {:error, ["Bad response from vault [http://localhost:8200/v1/]", "econnrefused"]}
+    assert Vaultex.Client.read("secret/boom", :app_id, {"good", "whatever"}) == {:error, ["Bad response from vault [http://localhost:8200/v1/]", :econnrefused]}
   end
 
   test "Write of valid secret key returns :ok" do
