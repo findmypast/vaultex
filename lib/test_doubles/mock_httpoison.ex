@@ -37,6 +37,7 @@ defmodule Vaultex.Test.TestDoubles.MockHTTPoison do
                                                  headers: [{"Location", redirect_url(url)}],
                                                  body: Poison.Encoder.encode(%{"auth" => %{"client_token" => "mytoken"}}, [])}}
       key |> String.contains?("boom") -> {:error, %HTTPoison.Error{id: nil, reason: :econnrefused}}
+      key |> String.contains?("ssl") -> {:error, %HTTPoison.Error{id: nil, reason: {:tls_alert, 'unknown ca'}}}
       :else -> {:ok, %{body: Poison.Encoder.encode(%{errors: ["Not Authenticated"] }, [])}}
     end
   end
