@@ -1,5 +1,9 @@
 # Changelog
 
+## 0.6.1
+* Use atom instead of sting for econnrefused
+* On error don't stringify the error reason - this adds too much noise
+
 ## 0.6.0
 * Added support for token authentication
 * Misc documentation changes
