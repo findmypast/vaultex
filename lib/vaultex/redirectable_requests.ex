@@ -37,6 +37,9 @@ defmodule Vaultex.RedirectableRequests do
   end
 
   defp ssl_skip_verify?() do
-    System.get_env("SSL_SKIP_VERIFY") || Application.get_env(:vaultex, :ssl_skip_verify) || false
+    System.get_env("VAULT_SSL_VERIFY")
+      || System.get_env("SSL_SKIP_VERIFY")
+      || Application.get_env(:vaultex, :vault_ssl_verify)
+      || false
   end
 end

@@ -49,8 +49,8 @@ Or application variables:
 
 These default to `localhost`, `8200`, `http` respectively.
 
-You can skip SSL certificate verification with `:vaultex, ssl_skip_verify: true` option
-or `SSL_SKIP_VERIFY=true` environment variable.  
+You can skip SSL certificate verification with `:vaultex, vault_ssl_verify: true` option
+or `VAULT_SSL_VERIFY=true` environment variable.  
 
 ## Usage
 
