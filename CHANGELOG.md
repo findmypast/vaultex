@@ -1,5 +1,8 @@
 # Changelog
 
+## 0.6.2
+* Add support for VAULT_SSL_VERIFY environment variable - this brings VaultEx in line with equivalent Vault libraries in Ruby, Node, etc
+
 ## 0.6.1
 * Use atom instead of sting for econnrefused
 * On error don't stringify the error reason - this adds too much noise
