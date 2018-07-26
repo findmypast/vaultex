@@ -24,8 +24,12 @@ defmodule Vaultex.Client do
 
     - method: Auth backend to use for authenticating, can be one of `:approle, :app_id, :userpass, :github, :token`
     - credentials: A tuple used for authentication depending on the method, `{role_id, secret_id}` for `:approle`, `{app_id, user_id}` for `:app_id`, `{username, password}` for `:userpass`, `{github_token}` for `:github`, `{token}` for `:token`
+    - timeout: A integer greater than zero which specifies how many milliseconds to wait for a reply
 
   ## Examples
+
+      iex> Vaultex.Client.auth(:approle {role_id, secret_id}, 5000)
+      {:ok, :authenticated}
 
       iex> Vaultex.Client.auth(:app_id, {app_id, user_id})
       {:ok, :authenticated}
@@ -36,13 +40,13 @@ defmodule Vaultex.Client do
       iex> Vaultex.Client.auth(:github, {github_token})
       {:ok, :authenticated}
   """
-  @spec auth(method :: :approle, credentials :: {role_id :: String.t, secret_id :: String.t}) :: {:ok | :error, any}
-  @spec auth(method :: :app_id, credentials :: {app_id :: String.t, user_id :: String.t}) :: {:ok | :error, any}
-  @spec auth(method :: :userpass, credentials :: {username :: String.t, password :: String.t}) :: {:ok | :error, any}
-  @spec auth(method :: :github, credentials :: {github_token :: String.t}) :: {:ok | :error, any}
-  @spec auth(method :: :token, credentials :: {token :: String.t}) :: {:ok, :authenticated}
-  def auth(method, credentials) do
-    GenServer.call(:vaultex, {:auth, method, credentials})
+  @spec auth(method :: :approle, credentials :: {role_id :: String.t, secret_id :: String.t}, timeout :: String.t | nil) :: {:ok | :error, any}
+  @spec auth(method :: :app_id, credentials :: {app_id :: String.t, user_id :: String.t}, timeout :: String.t | nil) :: {:ok | :error, any}
+  @spec auth(method :: :userpass, credentials :: {username :: String.t, password :: String.t}, timeout :: String.t | nil) :: {:ok | :error, any}
+  @spec auth(method :: :github, credentials :: {github_token :: String.t}, timeout :: String.t | nil) :: {:ok | :error, any}
+  @spec auth(method :: :token, credentials :: {token :: String.t}, timeout :: String.t | nil) :: {:ok, :authenticated}
+  def auth(method, credentials, timeout \\ 5000) do
+    GenServer.call(:vaultex, {:auth, method, credentials}, timeout)
   end
 
   @doc """
@@ -52,30 +56,34 @@ defmodule Vaultex.Client do
 
     - key: A String path to be used for querying vault.
     - auth_method and credentials: See Vaultex.Client.auth
+    - timeout: A integer greater than zero which specifies how many milliseconds to wait for a reply
 
   ## Examples
 
-      iex> Vaultex.Client.read "secret/foo", :app_id, {app_id, user_id}
+      iex> Vaultex.Client.read("secret/foobar", :approle, {role_id, secret_id}, 5000)
       {:ok, %{"value" => "bar"}}
 
-      iex> Vaultex.Client.read "secret/baz", :userpass, {username, password}
+      iex> Vaultex.Client.read("secret/foo", :app_id, {app_id, user_id})
+      {:ok, %{"value" => "bar"}}
+
+      iex> Vaultex.Client.read("secret/baz", :userpass, {username, password})
       {:error, ["Key not found"]}
 
-      iex> Vaultex.Client.read "secret/bar", :github, {github_token}
+      iex> Vaultex.Client.read("secret/bar", :github, {github_token})
       {:ok, %{"value" => "bar"}}
   """
-  def read(key, auth_method, credentials) do
-    response = read(key)
+  def read(key, auth_method, credentials, timeout \\ 5000) do
+    response = read(key, timeout)
     case response do
       {:ok, _} -> response
       {:error, _} ->
-        with {:ok, _} <- auth(auth_method, credentials),
-          do: read(key)
+        with {:ok, _} <- auth(auth_method, credentials, timeout),
+          do: read(key, timeout)
     end
   end
 
-  defp read(key) do
-    GenServer.call(:vaultex, {:read, key})
+  defp read(key, timeout) do
+    GenServer.call(:vaultex, {:read, key}, timeout)
   end
 
   @doc """
@@ -86,25 +94,29 @@ defmodule Vaultex.Client do
     - key: A String path where the secret will be written.
     - value: A String => String map that will be stored in Vault
     - auth_method and credentials: See Vaultex.Client.auth
+    - timeout: A integer greater than zero which specifies how many milliseconds to wait for a reply
 
   ## Examples
 
-      iex> Vaultex.Client.write "secret/foo", %{"value" => "bar"}, :app_id, {app_id, user_id}
+      iex> Vaultex.Client.write("secret/foo", %{"value" => "bar"}, :app_role, {role_id, secret_id}, 5000)
+      :ok
+
+      iex> Vaultex.Client.write("secret/foo", %{"value" => "bar"}, :app_id, {app_id, user_id})
       :ok
   """
-  def write(key, value, auth_method, credentials) do
-    response = write(key, value)
+  def write(key, value, auth_method, credentials, timeout \\ 5000) do
+    response = write(key, value, timeout)
     case response do
       :ok -> response
       {:ok, response} -> {:ok, response}
       {:error, _} ->
-        with {:ok, _} <- auth(auth_method, credentials),
-          do: write(key, value)
+        with {:ok, _} <- auth(auth_method, credentials, timeout),
+          do: write(key, value, timeout)
     end
   end
 
-  defp write(key, value) do
-    GenServer.call(:vaultex, {:write, key, value})
+  defp write(key, value, timeout) do
+    GenServer.call(:vaultex, {:write, key, value}, timeout)
   end
 
   def handle_call({:read, key}, _from, state) do

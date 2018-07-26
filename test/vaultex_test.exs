@@ -78,6 +78,10 @@ defmodule VaultexTest do
     assert Vaultex.Client.auth(:token, {"good"}) == {:ok, :authenticated}
   end
 
+  test "Authentication of token with timeout is successful" do
+    assert Vaultex.Client.auth(:token, {"good"}, 5000) == {:ok, :authenticated}
+  end
+
   test "Authentication of token is unsuccessful" do
     assert Vaultex.Client.auth(:token, {"bad"}) == {:error, ["Not Authenticated"]}
   end
@@ -92,6 +96,10 @@ defmodule VaultexTest do
 
   test "Read of valid secret key returns the correct value" do
     assert Vaultex.Client.read("secret/foo", :app_id, {"good", "whatever"}) == {:ok, %{"value" => "bar"}}
+  end
+
+  test "Read of valid secret key with timeout returns the correct value" do
+    assert Vaultex.Client.read("secret/foo", :app_id, {"good", "whatever"}, 5000) == {:ok, %{"value" => "bar"}}
   end
 
   test "Read of valid secret key requiring redirect returns the correct value" do
@@ -114,6 +122,10 @@ defmodule VaultexTest do
     assert Vaultex.Client.write("secret/foo", %{"value" => "bar"}, :app_id, {"good", "whatever"}) == :ok
   end
 
+  test "Write of valid secret key with timeout returns :ok" do
+    assert Vaultex.Client.write("secret/foo", %{"value" => "bar"}, :app_id, {"good", "whatever"}, 5000) == :ok
+  end
+
   test "Write of valid secret key requiring redirect returns :ok" do
     assert Vaultex.Client.write("secret/foo/redirects", %{"value" => "bar"}, :app_id, {"good", "whatever"}) == :ok
   end
@@ -121,5 +133,4 @@ defmodule VaultexTest do
   test "Write of valid secret key requiring response returns :ok and response" do
     assert Vaultex.Client.write("secret/foo/withresponse", %{"value" => "bar"}, :app_id, {"good", "whatever"}) == {:ok, %{"value" => "bar"}}
   end
-
 end
