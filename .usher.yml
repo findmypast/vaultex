@@ -20,3 +20,4 @@ tasks:
       environment:
         - HEX_USER=<%=user%>
         - HEX_PASSWORD=<%=password%>
+        - LOCAL_PWD=<%=password%>
