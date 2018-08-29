@@ -23,7 +23,7 @@ defmodule Vaultex.Client do
   ## Parameters
 
     - method: Auth backend to use for authenticating, can be one of `:approle, :app_id, :userpass, :github, :token`
-    - credentials: A tuple used for authentication depending on the method, `{role_id, secret_id}` for `:approle`, `{app_id, user_id}` for `:app_id`, `{username, password}` for `:userpass`, `{github_token}` for `:github`, `{token}` for `:token`
+    - credentials: A tuple or map used for authentication depending on the method, `{role_id, secret_id}` for `:approle`, `{app_id, user_id}` for `:app_id`, `{username, password}` for `:userpass`, `{github_token}` for `:github`, `{token}` for `:token`, or json-encodable map for unhandled methods, i.e. `%{jwt: "jwt", role: "role"}` for `:kubernetes`
     - timeout: A integer greater than zero which specifies how many milliseconds to wait for a reply
 
   ## Examples
@@ -39,12 +39,16 @@ defmodule Vaultex.Client do
 
       iex> Vaultex.Client.auth(:github, {github_token})
       {:ok, :authenticated}
+
+      iex> Vaultex.Client.auth(:jwt, %{jwt: jwt, role: role})
+      {:ok, :authenticated}
   """
   @spec auth(method :: :approle, credentials :: {role_id :: String.t, secret_id :: String.t}, timeout :: String.t | nil) :: {:ok | :error, any}
   @spec auth(method :: :app_id, credentials :: {app_id :: String.t, user_id :: String.t}, timeout :: String.t | nil) :: {:ok | :error, any}
   @spec auth(method :: :userpass, credentials :: {username :: String.t, password :: String.t}, timeout :: String.t | nil) :: {:ok | :error, any}
   @spec auth(method :: :github, credentials :: {github_token :: String.t}, timeout :: String.t | nil) :: {:ok | :error, any}
   @spec auth(method :: :token, credentials :: {token :: String.t}, timeout :: String.t | nil) :: {:ok, :authenticated}
+  @spec auth(method :: atom, credentials :: map) :: {:ok | :error, any}
   def auth(method, credentials, timeout \\ 5000) do
     GenServer.call(:vaultex, {:auth, method, credentials}, timeout)
   end
@@ -70,6 +74,9 @@ defmodule Vaultex.Client do
       {:error, ["Key not found"]}
 
       iex> Vaultex.Client.read("secret/bar", :github, {github_token})
+      {:ok, %{"value" => "bar"}}
+
+      iex> Vaultex.Client.read("secret/bar", :plugin_defined_auth, credentials)
       {:ok, %{"value" => "bar"}}
   """
   def read(key, auth_method, credentials, timeout \\ 5000) do
