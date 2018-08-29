@@ -94,6 +94,20 @@ defmodule VaultexTest do
     assert Vaultex.Client.auth(:token, {"ssl"}) == {:error, ["Bad response from vault [http://localhost:8200/v1/]", {:tls_alert, 'unknown ca'}]}
   end
 
+  test "Authentication of arbitrary method and credentials" do
+    assert Vaultex.Client.auth(:kubernetes, %{jwt: "good", role: "demo"}) == {:ok, :authenticated}
+  end
+
+  test "Authentication of arbitrary method is unsuccessful" do
+    assert Vaultex.Client.auth(:kubernetes, %{jwt: "bad", role: "demo"}) == {:error, ["Not Authenticated"]}
+  end
+
+  test "Authentication with arbirary method username and password" do
+    assert Vaultex.Client.auth(:radius, %{username: "user", password: "good"}) == {:ok, :authenticated}
+
+    assert Vaultex.Client.auth(:plugin_defined, %{username: "user", password: "good"}) == {:ok, :authenticated}
+  end
+
   test "Read of valid secret key returns the correct value" do
     assert Vaultex.Client.read("secret/foo", :app_id, {"good", "whatever"}) == {:ok, %{"value" => "bar"}}
   end

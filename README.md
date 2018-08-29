@@ -70,6 +70,10 @@ iex> Vaultex.Client.auth(:approle, {role_id, secret_id})
 
 iex> Vaultex.Client.auth(:token, {token})
 
+iex> Vaultex.Client.auth(:kubernetes, %{jwt: "jwt", role: "role"})
+
+iex> Vaultex.Client.auth(:radius, %{username: "user", password: "password"})
+
 ...
 iex> Vaultex.Client.read "secret/bar", :github, {github_token} #returns {:ok, %{"value" => bar"}}
 

@@ -1,31 +1,41 @@
 defmodule Vaultex.Auth do
   def handle(:approle, {role_id, secret_id}, state) do
-    request(:post, "#{state.url}auth/approle/login", %{role_id: role_id, secret_id: secret_id}, [{"Content-Type", "application/json"}])
-    |> handle_response(state)
+    handle(:approle, %{role_id: role_id, secret_id: secret_id}, state)
   end
 
   def handle(:app_id, {app_id, user_id}, state) do
-    request(:post, "#{state.url}auth/app-id/login", %{app_id: app_id, user_id: user_id}, [{"Content-Type", "application/json"}])
-    |> handle_response(state)
+    handle(:app_id, %{app_id: app_id, user_id: user_id}, state)
   end
 
   def handle(:userpass, {username, password}, state) do
-    request(:post, "#{state.url}auth/userpass/login/#{username}", %{password: password}, [{"Content-Type", "application/json"}])
-    |> handle_response(state)
+    handle(:userpass, %{username: username, password: password}, state)
   end
 
   def handle(:ldap, {username, password}, state) do
-    request(:post, "#{state.url}auth/ldap/login/#{username}", %{password: password}, [{"Content-Type", "application/json"}])
-    |> handle_response(state)
+    handle(:ldap, %{username: username, password: password}, state)
   end
 
   def handle(:github, {token}, state) do
-    request(:post, "#{state.url}auth/github/login", %{token: token}, [{"Content-Type", "application/json"}])
-    |> handle_response(state)
+    handle(:github, %{token: token}, state)
   end
 
   def handle(:token, {token}, state) do
-    request(:get, "#{state.url}auth/token/lookup-self", %{}, [{"X-Vault-Token", token}, {"Content-Type", "application/json"}])
+    request(:get, "#{state.url}auth/token/lookup-self", %{}, [
+      {"X-Vault-Token", token},
+      {"Content-Type", "application/json"}
+    ])
+    |> handle_response(state)
+  end
+
+  # auth method with usernames are expected to call `POST auth/:method/login/:username`
+  def handle(method, %{username: username} = credentials, state) do
+    request(:post, "#{state.url}auth/#{method}/login/#{username}", credentials, [{"Content-Type", "application/json"}])
+    |> handle_response(state)
+  end
+
+  # Generic login behavior for most methods
+  def handle(method, credentials, state) when is_map(credentials) do
+    request(:post, "#{state.url}auth/#{method}/login", credentials, [{"Content-Type", "application/json"}])
     |> handle_response(state)
   end
 
