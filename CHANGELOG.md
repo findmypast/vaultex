@@ -1,5 +1,8 @@
 # Changelog
 
+## 0.8.0
+* Authentication methods are more generic
+
 ## 0.7.0
 * Add support for certificate files in request
 * Add timeout to client
