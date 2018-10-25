@@ -128,7 +128,7 @@ defmodule VaultexTest do
     assert Vaultex.Client.read("secret/faz", :app_id, {"bad", "whatever"}) == {:error, ["Not Authenticated"]}
   end
 
-  test "Read of a secret key causes and exception" do
+  test "Read of a secret key causes an exception" do
     assert Vaultex.Client.read("secret/boom", :app_id, {"good", "whatever"}) == {:error, ["Bad response from vault [http://localhost:8200/v1/]", :econnrefused]}
   end
 
@@ -146,5 +146,21 @@ defmodule VaultexTest do
 
   test "Write of valid secret key requiring response returns :ok and response" do
     assert Vaultex.Client.write("secret/foo/withresponse", %{"value" => "bar"}, :app_id, {"good", "whatever"}) == {:ok, %{"value" => "bar"}}
+  end
+
+  test "Deletion of valid secret key returns :ok" do
+    assert Vaultex.Client.delete("secret/foo", :app_id, {"good", "whatever"}) == :ok
+  end
+
+  test "Deletion of a nonexistent key returns :ok" do
+    assert Vaultex.Client.delete("secret/baz", :app_id, {"good", "whatever"}) == :ok
+  end
+
+  test "Deletion of a valid secret key with timeout returns :ok" do
+    assert Vaultex.Client.delete("secret/foo", :app_id, {"good", "whatever"}, 5000) == :ok
+  end
+
+  test "Read of valid secret key requiring redirect returns :ok" do
+    assert Vaultex.Client.delete("secret/foo/redirects", :app_id, {"good", "whatever"}) == :ok
   end
 end
