@@ -147,7 +147,6 @@ defmodule Vaultix.Client do
 
   def delete(key, auth_method, credentials, timeout \\ 5000) do
     response = delete(key, timeout)
-    IO.inspect(response)
     case response do
       :ok -> response
       {:error, _} ->
