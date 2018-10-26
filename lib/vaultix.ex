@@ -1,4 +1,4 @@
-defmodule Vaultex do
+defmodule Vaultix do
   @moduledoc """
   Interface with Hashicorp's vault.
   """
@@ -11,12 +11,12 @@ defmodule Vaultex do
 
     children = [
       # Define workers and child supervisors to be supervised
-      worker(Vaultex.Client, []),
+      worker(Vaultix.Client, []),
     ]
 
     # See http://elixir-lang.org/docs/stable/elixir/Supervisor.html
     # for other strategies and supported options
-    opts = [strategy: :one_for_one, name: Vaultex.Supervisor]
+    opts = [strategy: :one_for_one, name: Vaultix.Supervisor]
     Supervisor.start_link(children, opts)
   end
 end

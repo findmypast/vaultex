@@ -10,11 +10,11 @@ use Mix.Config
 
 # You can configure for your application as:
 #
-#     config :vaultex, key: :value
+#     config :vaultix, key: :value
 #
 # And access this configuration in your application as:
 #
-#     Application.get_env(:vaultex, :key)
+#     Application.get_env(:vaultix, :key)
 #
 # Or configure a 3rd-party app:
 #
@@ -29,6 +29,6 @@ use Mix.Config
 #
 #     import_config "#{Mix.env}.exs"
 
-config :vaultex, httpoison: HTTPoison
+config :vaultix, httpoison: HTTPoison
 
 import_config "#{Mix.env}.exs"

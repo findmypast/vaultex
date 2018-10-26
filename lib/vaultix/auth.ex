@@ -1,4 +1,4 @@
-defmodule Vaultex.Auth do
+defmodule Vaultix.Auth do
   def handle(:approle, {role_id, secret_id}, state) do
     handle(:approle, %{role_id: role_id, secret_id: secret_id}, state)
   end
@@ -52,6 +52,6 @@ defmodule Vaultex.Auth do
   end
 
   defp request(method, url, params = %{}, headers) do
-    Vaultex.RedirectableRequests.request(method, url, params, headers)
+    Vaultix.RedirectableRequests.request(method, url, params, headers)
   end
 end

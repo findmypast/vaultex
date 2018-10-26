@@ -1,8 +1,8 @@
-defmodule Vaultex.Mixfile do
+defmodule Vaultix.Mixfile do
   use Mix.Project
 
   def project do
-    [app: :vaultex,
+    [app: :vaultix,
      version: String.trim(File.read!("VERSION")),
      elixir: "~> 1.5",
      build_embedded: Mix.env == :prod,
@@ -17,7 +17,7 @@ defmodule Vaultex.Mixfile do
   # Type "mix help compile.app" for more information
   def application do
     [applications: [:logger, :httpoison],
-     mod: {Vaultex, []}]
+     mod: {Vaultix, []}]
   end
 
   # Dependencies can be Hex packages:
@@ -33,21 +33,21 @@ defmodule Vaultex.Mixfile do
     [{:httpoison, "~> 1.0"},
     {:poison, "~> 3.1"},
     {:eliver, "~> 2.0"},
-    {:ex_doc, ">= 0.0.0", only: :dev}]
+    {:ex_doc, "~> 0.19", only: :dev}]
   end
 
   defp description do
     """
-    A very simple read only client that authenticates and reads secrets from HashiCorp's Vault.
+    A very simple read only client that authenticates and reads secrets from HashiCorp's Vault. Forked from findmypast/vaultex.
     """
   end
 
   defp package do
     [# These are the default files included in the package
      files: ["lib", "mix.exs", "README*", "VERSION", "CHANGELOG.md"],
-     maintainers: ["opensource@findmypast.com"],
+     maintainers: ["paracetamolboy@gmail.com"],
      licenses: ["Apache 2.0"],
-     links: %{"GitHub" => "https://github.com/findmypast/vaultex"}
+     links: %{"GitHub" => "https://github.com/mracter/vaultix"}
     ]
   end
 end

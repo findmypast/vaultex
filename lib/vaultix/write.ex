@@ -1,4 +1,4 @@
-defmodule Vaultex.Write do
+defmodule Vaultix.Write do
   def handle(key, value, state = %{token: token}) do
     request(:put, "#{state.url}#{key}", value, [{"Content-Type", "application/json"}, {"X-Vault-Token", token}])
     |> handle_response(state)
@@ -26,6 +26,6 @@ defmodule Vaultex.Write do
   end
 
   defp request(method, url, body, headers) do
-    Vaultex.RedirectableRequests.request(method, url, body, headers)
+    Vaultix.RedirectableRequests.request(method, url, body, headers)
   end
 end

@@ -1,61 +1,52 @@
-    <!DOCTYPE html>
+<!DOCTYPE html>
 <html lang="en">
   <head>
     <meta charset="utf-8">
     <meta http-equiv="x-ua-compatible" content="ie=edge">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <meta name="generator" content="ExDoc v0.18.1">
-    <title>Vaultex – vaultex v0.5.1</title>
+    <meta name="generator" content="ExDoc v0.19.1">
+    <title>Vaultix – vaultix v0.9.0</title>
     <link rel="stylesheet" href="dist/app-091c05798a.css" />
-    
-      <link rel="canonical" href="https://hexdocs.pm/vaultex/Vaultex.html" />
-    
-    <script src="dist/sidebar_items-1461c5f95d.js"></script>
-    
-    
-    
+      <link rel="canonical" href="https://hexdocs.pm/vaultix/Vaultix.html" />
+    <script src="dist/sidebar_items-99d0d391cb.js"></script>
     
   </head>
   <body data-type="modules">
     <script>try { if(localStorage.getItem('night-mode')) document.body.className += ' night-mode'; } catch (e) { }</script>
-
     <div class="main">
-<button class="sidebar-toggle">
+<button class="sidebar-button sidebar-toggle">
   <span class="icon-menu" aria-hidden="true"></span>
   <span class="sr-only">Toggle Sidebar</span>
 </button>
+<button class="sidebar-button night-mode-toggle">
+  <span class="icon-theme" aria-hidden="true"></span>
+  <span class="sr-only">Toggle Theme</span>
+</button>
 <section class="sidebar">
 
-  
   <a href="api-reference.html" class="sidebar-projectLink">
     <div class="sidebar-projectDetails">
       <h1 class="sidebar-projectName">
-        vaultex
-      </h1>
+vaultix      </h1>
       <h2 class="sidebar-projectVersion">
-        v0.5.1
+        v0.9.0
       </h2>
     </div>
-    
   </a>
 
   <form class="sidebar-search" action="search.html">
     <button type="submit" class="search-button">
       <span class="icon-search" aria-hidden="true"></span>
     </button>
-    <input name="q" type="text" id="search-list" class="search-input" placeholder="search" aria-label="Search" autocomplete="off" />
+    <input name="q" type="text" id="search-list" class="search-input" placeholder="Search" aria-label="Search" autocomplete="off" />
   </form>
 
   <ul class="sidebar-listNav">
     <li><a id="extras-list" href="#full-list">Pages</a></li>
 
-    
       <li><a id="modules-list" href="#full-list">Modules</a></li>
-    
 
-    
 
-    
   </ul>
   <div class="gradient"></div>
   <ul id="full-list" class="sidebar-fullList"></ul>
@@ -67,19 +58,14 @@
 
 
       <h1>
-        <small class="visible-xs">vaultex v0.5.1</small>
-        Vaultex
-        
-      </h1>
+        <small class="visible-xs">vaultix v0.9.0</small>
+Vaultix              </h1>
 
-      
+
         <section id="moduledoc">
-          <p>Interface with Hashicorp’s vault.</p>
-
+<p>Interface with Hashicorp’s vault.</p>
         </section>
-      
 
-      
         <section id="summary" class="details-list">
           <h1 class="section-heading">
             <a class="hover-link" href="#summary">
@@ -89,33 +75,23 @@
             Summary
           </h1>
           
-
-          
   <div class="summary-functions summary">
     <h2>
       <a href="#functions">Functions</a>
     </h2>
-    <div class="summary-row">
+<div class="summary-row">
   <div class="summary-signature">
     <a href="#start/2">start(type, args)</a>
   </div>
-  
     <div class="summary-synopsis"><p>Called when an application is started</p>
 </div>
-  
 </div>
-
   </div>
-
-
           
-
         </section>
-      
 
-      
 
-      
+
         <section id="functions" class="details-list">
           <h1 class="section-heading">
             <a class="hover-link" href="#functions">
@@ -124,21 +100,16 @@
             </a>
             Functions
           </h1>
-          <div class="detail" id="start/2">
-  
-  
-  <div class="detail-header">
+<div class="detail" id="start/2">
+    <div class="detail-header">
     <a href="#start/2" class="detail-link" title="Link to this function">
       <span class="icon-link" aria-hidden="true"></span>
       <span class="sr-only">Link to this function</span>
     </a>
     <span class="signature">start(type, args)</span>
-    
-    
-    
-  </div>
+          </div>
   <section class="docstring">
-    <p>Called when an application is started.</p>
+<p>Called when an application is started.</p>
 <p>This function is called when an application is started using
 <a href="https://hexdocs.pm/elixir/Application.html#start/2"><code class="inline">Application.start/2</code></a> (and functions on top of that, such as
 <a href="https://hexdocs.pm/elixir/Application.html#ensure_started/2"><code class="inline">Application.ensure_started/2</code></a>). This function should start the top-level
@@ -170,35 +141,27 @@ the documentation for the <code class="inline">c:stop/1</code> callback for more
 <p><code class="inline">use Application</code> provides no default implementation for the <a href="#start/2"><code class="inline">start/2</code></a>
 callback.</p>
 <p>Callback implementation for <a href="https://hexdocs.pm/elixir/Application.html#c:start/2"><code class="inline">Application.start/2</code></a>.</p>
-
   </section>
 </div>
-
         </section>
-      
 
-      
           <footer class="footer">
         <p>
           <span class="line">
             Built using
-            <a href="https://github.com/elixir-lang/ex_doc" title="ExDoc" rel="help" target="_blank">ExDoc</a> (v0.18.1),
+            <a href="https://github.com/elixir-lang/ex_doc" title="ExDoc" target="_blank" rel="help noopener">ExDoc</a> (v0.19.1),
           </span>
           <span class="line">
             designed by
-            <a href="https://twitter.com/dignifiedquire" target="_blank" title="@dignifiedquire">Friedel Ziegelmayer</a>.
+            <a href="https://twitter.com/dignifiedquire" target="_blank" rel="noopener" title="@dignifiedquire">Friedel Ziegelmayer</a>.
             </span>
         </p>
-        <button class="night-mode-toggle"><span class="sr-only">Switch theme</span></button>
       </footer>
     </div>
   </div>
 </section>
 </div>
   <script src="dist/app-574613960f.js"></script>
-  
-  
-  
   
   </body>
 </html>

@@ -1,5 +1,8 @@
 # Changelog
 
+## 0.9.0
+* Vaultix client now supports deleting secrets from a path
+
 ## 0.8.0
 * Authentication methods are more generic
 

@@ -1,4 +1,4 @@
-defmodule Vaultex.Test.TestDoubles.MockHTTPoison do
+defmodule Vaultix.Test.TestDoubles.MockHTTPoison do
 
   def request(:post, url, params, _, _) do
     stringified_params = List.to_string params

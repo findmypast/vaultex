@@ -1,6 +1,6 @@
 use Mix.Config
 
-config :vaultex, httpoison: Vaultex.Test.TestDoubles.MockHTTPoison
-config :vaultex, app_id: "foo"
-config :vaultex, user_id: "bar"
-config :vaultex, vault_addr: "http://localhost:8200"
+config :vaultix, httpoison: Vaultix.Test.TestDoubles.MockHTTPoison
+config :vaultix, app_id: "foo"
+config :vaultix, user_id: "bar"
+config :vaultix, vault_addr: "http://localhost:8200"

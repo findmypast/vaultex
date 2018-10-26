@@ -1,26 +1,26 @@
-# :lock: Vaultex
+# :lock: Vaultix
 
-[![Hex.pm](https://img.shields.io/hexpm/v/vaultex.svg)](https://hex.pm/packages/vaultex)
-[![Hex.pm](https://img.shields.io/hexpm/dt/vaultex.svg)](https://hex.pm/packages/vaultex)
+[![Hex.pm](https://img.shields.io/hexpm/v/vaultix.svg)](https://hex.pm/packages/vaultix)
+[![Hex.pm](https://img.shields.io/hexpm/dt/vaultix.svg)](https://hex.pm/packages/vaultix)
 
-A very simple elixir client that authenticates, reads and writes secrets from HashiCorp's Vault. As listed on [Vault Libraries](https://www.vaultproject.io/api/libraries.html#elixir).
+A very simple elixir client that authenticates, reads, writes, and deletes secrets from HashiCorp's Vault. As listed on [Vault Libraries](https://www.vaultproject.io/api/libraries.html#elixir). Forked from https://github.com/findmypast/vaultex.
 
 ## Installation
 
 The package can be installed as:
 
-  1. Add vaultex to your list of dependencies in `mix.exs`:
+  1. Add vaultix to your list of dependencies in `mix.exs`:
 
 ```elixir
 def deps do
-  [{:vaultex, "~> 0.5"}]
+  [{:vaultix, "~> 0.8"}]
 end
 ```
-  2. Ensure vaultex is started before your application:
+  2. Ensure vaultix is started before your application:
 
 ```elixir
 def application do
-  [applications: [:vaultex]]
+  [applications: [:vaultix]]
 end
 ```
 ## Configuration
@@ -31,7 +31,7 @@ You can configure your vault endpoint with a single environment variable:
 
 Or a single application variable:
 
-* `:vaultex, :vault_addr`
+* `:vaultix, :vault_addr`
 
 An example value for `VAULT_ADDR` is `http://127.0.0.1:8200`.
 
@@ -43,42 +43,42 @@ Alternatively the vault endpoint can be specified with environment variables:
 
 Or application variables:
 
-* `:vaultex, :host`
-* `:vaultex, :port`
-* `:vaultex, :scheme`
+* `:vaultix, :host`
+* `:vaultix, :port`
+* `:vaultix, :scheme`
 
 These default to `localhost`, `8200`, `http` respectively.
 
-You can skip SSL certificate verification with `:vaultex, vault_ssl_verify: true` option
+You can skip SSL certificate verification with `:vaultix, vault_ssl_verify: true` option
 or `VAULT_SSL_VERIFY=true` environment variable.  
 
 ## Usage
 
-To read a secret you must provide the path to the secret and the authentication backend and credentials you will use to login. See the [Vaultex.Client.auth/2](https://hexdocs.pm/vaultex/Vaultex.Client.html#auth/2) docs for supported auth backends.
+To read a secret you must provide the path to the secret and the authentication backend and credentials you will use to login. See the [Vaultix.Client.auth/2](https://hexdocs.pm/vaultix/Vaultix.Client.html#auth/2) docs for supported auth backends.
 
 ```elixir
 ...
-iex> Vaultex.Client.auth(:app_id, {app_id, user_id})
+iex> Vaultix.Client.auth(:app_id, {app_id, user_id})
 
-iex> Vaultex.Client.auth(:userpass, {username, password})
+iex> Vaultix.Client.auth(:userpass, {username, password})
 
-iex> Vaultex.Client.auth(:ldap, {username, password})
+iex> Vaultix.Client.auth(:ldap, {username, password})
 
-iex> Vaultex.Client.auth(:github, {github_token})
+iex> Vaultix.Client.auth(:github, {github_token})
 
-iex> Vaultex.Client.auth(:approle, {role_id, secret_id})
+iex> Vaultix.Client.auth(:approle, {role_id, secret_id})
 
-iex> Vaultex.Client.auth(:token, {token})
+iex> Vaultix.Client.auth(:token, {token})
 
-iex> Vaultex.Client.auth(:kubernetes, %{jwt: "jwt", role: "role"})
+iex> Vaultix.Client.auth(:kubernetes, %{jwt: "jwt", role: "role"})
 
-iex> Vaultex.Client.auth(:radius, %{username: "user", password: "password"})
-
-...
-iex> Vaultex.Client.read "secret/bar", :github, {github_token} #returns {:ok, %{"value" => bar"}}
+iex> Vaultix.Client.auth(:radius, %{username: "user", password: "password"})
 
 ...
-iex> Vaultex.Client.write "secret/foo", %{"value" => "bar"}, :app_id, {app_id, user_id}
+iex> Vaultix.Client.read "secret/bar", :github, {github_token} #returns {:ok, %{"value" => bar"}}
+
+...
+iex> Vaultix.Client.write "secret/foo", %{"value" => "bar"}, :app_id, {app_id, user_id}
 
 ```
 

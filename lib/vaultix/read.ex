@@ -1,4 +1,4 @@
-defmodule Vaultex.Read do
+defmodule Vaultix.Read do
   def handle(key, state = %{token: token}) do
     request(:get, "#{state.url}#{key}", %{}, [{"X-Vault-Token", token}])
     |> handle_response(state)
@@ -22,6 +22,6 @@ defmodule Vaultex.Read do
   end
 
   defp request(method, url, params = %{}, headers) do
-    Vaultex.RedirectableRequests.request(method, url, params, headers)
+    Vaultix.RedirectableRequests.request(method, url, params, headers)
   end
 end

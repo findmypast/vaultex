@@ -1,6 +1,6 @@
 vars:
   registry: docker-registry.dun.fh
-  service_name: vaultex
+  service_name: vaultix
 
 tasks:
   build:
@@ -11,12 +11,12 @@ tasks:
 
   # Run unit tests inside a container
   test:
-    - cmd: docker run --name vaultex-test-runner --rm <%=registry%>/findmypast/<%=service_name%>:<%=version%> mix test
+    - cmd: docker run --name vaultix-test-runner --rm <%=registry%>/findmypast/<%=service_name%>:<%=version%> mix test
 
   # Publish to Hex Repository
   publish:
     - cmd: docker pull <%=registry%>/findmypast/<%=service_name%>:<%=version%>
-    - cmd: docker run -e HEX_USER -e HEX_PASSWORD --name vaultex-publisher --rm <%=registry%>/findmypast/<%=service_name%>:<%=version%> ./publish.sh
+    - cmd: docker run -e HEX_USER -e HEX_PASSWORD --name vaultix-publisher --rm <%=registry%>/findmypast/<%=service_name%>:<%=version%> ./publish.sh
       environment:
         - HEX_USER=<%=user%>
         - HEX_PASSWORD=<%=password%>

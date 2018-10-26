@@ -1,5 +1,5 @@
 use Mix.Config
 
-config :vaultex, httpoison: HTTPoison
-config :vaultex, app_id: "foo"
-config :vaultex, user_id: "bar"
+config :vaultix, httpoison: HTTPoison
+config :vaultix, app_id: "foo"
+config :vaultix, user_id: "bar"

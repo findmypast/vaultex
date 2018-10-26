@@ -1,4 +1,4 @@
-defmodule Vaultex.Delete do
+defmodule Vaultix.Delete do
   def handle(key, state = %{token: token}) do
     request(:delete, "#{state.url}#{key}", %{}, [{"X-Vault-Token", token}])
     |> handle_response(state)
@@ -20,6 +20,6 @@ defmodule Vaultex.Delete do
   end
 
   defp request(method, url, params = %{}, headers) do
-    Vaultex.RedirectableRequests.request(method, url, params, headers)
+    Vaultix.RedirectableRequests.request(method, url, params, headers)
   end
 end
