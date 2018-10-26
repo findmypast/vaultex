@@ -1,0 +1,12 @@
+{application,vaultex,
+             [{applications,[kernel,stdlib,elixir,logger,httpoison]},
+              {description,"A very simple read only client that authenticates and reads secrets from HashiCorp's Vault.\n"},
+              {modules,['Elixir.Vaultex','Elixir.Vaultex.Auth',
+                        'Elixir.Vaultex.Client','Elixir.Vaultex.Delete',
+                        'Elixir.Vaultex.Read',
+                        'Elixir.Vaultex.RedirectableRequests',
+                        'Elixir.Vaultex.Test.TestDoubles.MockHTTPoison',
+                        'Elixir.Vaultex.Write']},
+              {registered,[]},
+              {vsn,"0.8.0"},
+              {mod,{'Elixir.Vaultex',[]}}]}.

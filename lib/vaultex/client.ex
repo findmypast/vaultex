@@ -7,6 +7,7 @@ defmodule Vaultex.Client do
   alias Vaultex.Auth, as: Auth
   alias Vaultex.Read, as: Read
   alias Vaultex.Write, as: Write
+  alias Vaultex.Delete, as: Delete
   @version "v1"
 
   def start_link() do
@@ -126,6 +127,37 @@ defmodule Vaultex.Client do
     GenServer.call(:vaultex, {:write, key, value}, timeout)
   end
 
+  @doc """
+  Deletes a secret in Vault given a path.
+
+  ## Parameters
+
+    - key: A String path where the secret will be deleted.
+    - auth_method and credentials: See Vaultex.Client.auth
+    - timeout: A integer greater than zero which specifies how many milliseconds to wait for a reply
+
+  ## Examples
+
+      iex> Vaultex.Client.delete("secret/foo", :app_role, {role_id, secret_id}, 5000)
+      :ok
+
+      iex> Vaultex.Client.delete("secret/foo", :app_id, {app_id, user_id})
+      :ok
+  """
+  def delete(key, auth_method, credentials, timeout \\ 5000) do
+    response = delete(key, timeout)
+    case response do
+      :ok -> response
+      {:error, _} ->
+        with {:ok, _} <- auth(auth_method, credentials, timeout),
+          do: delete(key, timeout)
+    end
+  end
+
+  defp delete(key, timeout) do
+    GenServer.call(:vaultex, {:delete, key}, timeout)
+  end
+
   def handle_call({:read, key}, _from, state) do
     Read.handle(key, state)
   end
@@ -136,6 +168,10 @@ defmodule Vaultex.Client do
 
   def handle_call({:auth, method, credentials}, _from, state) do
     Auth.handle(method, credentials, state)
+  end
+
+  def handle_call({:delete, key}, _from, state) do
+    Delete.handle(key, state)
   end
 
   defp url do
