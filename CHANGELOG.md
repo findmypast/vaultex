@@ -1,5 +1,8 @@
 # Changelog
 
+## 0.9.0
+* Added delete key feature
+
 ## 0.8.0
 * Authentication methods are more generic
 
