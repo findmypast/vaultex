@@ -3,7 +3,7 @@
 [![Hex.pm](https://img.shields.io/hexpm/v/vaultex.svg)](https://hex.pm/packages/vaultex)
 [![Hex.pm](https://img.shields.io/hexpm/dt/vaultex.svg)](https://hex.pm/packages/vaultex)
 
-A very simple elixir client that authenticates, reads and writes secrets from HashiCorp's Vault. As listed on [Vault Libraries](https://www.vaultproject.io/api/libraries.html#elixir).
+A very simple elixir client that authenticates, reads, writes and deletes secrets from HashiCorp's Vault. As listed on [Vault Libraries](https://www.vaultproject.io/api/libraries.html#elixir).
 
 ## Installation
 
@@ -13,7 +13,7 @@ The package can be installed as:
 
 ```elixir
 def deps do
-  [{:vaultex, "~> 0.5"}]
+  [{:vaultex, "~> 0.8"}]
 end
 ```
   2. Ensure vaultex is started before your application:
@@ -79,6 +79,9 @@ iex> Vaultex.Client.read "secret/bar", :github, {github_token} #returns {:ok, %{
 
 ...
 iex> Vaultex.Client.write "secret/foo", %{"value" => "bar"}, :app_id, {app_id, user_id}
+
+...
+iex> Vaultex.Client.delete "secret/foo", :app_id, {app_id, user_id}
 
 ```
 
