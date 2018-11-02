@@ -109,15 +109,15 @@ defmodule VaultexTest do
   end
 
   test "Read of valid secret key returns the correct value" do
-    assert Vaultex.Client.read("secret/foo", :app_id, {"good", "whatever"}) == {:ok, %{"value" => "bar"}}
+    assert Vaultex.Client.read("secret/foo", :app_id, {"good", "whatever"}) == {:ok, %{"data" => %{"value" => "bar"}}}
   end
 
   test "Read of valid secret key with timeout returns the correct value" do
-    assert Vaultex.Client.read("secret/foo", :app_id, {"good", "whatever"}, 5000) == {:ok, %{"value" => "bar"}}
+    assert Vaultex.Client.read("secret/foo", :app_id, {"good", "whatever"}, 5000) == {:ok, %{"data" => %{"value" => "bar"}}}
   end
 
   test "Read of valid secret key requiring redirect returns the correct value" do
-    assert Vaultex.Client.read("secret/foo/redirects", :app_id, {"good", "whatever"}) == {:ok, %{"value" => "bar"}}
+    assert Vaultex.Client.read("secret/foo/redirects", :app_id, {"good", "whatever"}) == {:ok, %{"data" => %{"value" => "bar"}}}
   end
 
   test "Read of non existing secret key returns error" do

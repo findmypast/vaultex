@@ -66,19 +66,19 @@ defmodule Vaultex.Client do
   ## Examples
 
       iex> Vaultex.Client.read("secret/foobar", :approle, {role_id, secret_id}, 5000)
-      {:ok, %{"value" => "bar"}}
+      {:ok, %{"data" => %{"value" => "bar"}}}
 
       iex> Vaultex.Client.read("secret/foo", :app_id, {app_id, user_id})
-      {:ok, %{"value" => "bar"}}
+      {:ok, %{"data" => %{"value" => "bar"}}}
 
       iex> Vaultex.Client.read("secret/baz", :userpass, {username, password})
       {:error, ["Key not found"]}
 
       iex> Vaultex.Client.read("secret/bar", :github, {github_token})
-      {:ok, %{"value" => "bar"}}
+      {:ok, %{"data" => %{"value" => "bar"}}}
 
       iex> Vaultex.Client.read("secret/bar", :plugin_defined_auth, credentials)
-      {:ok, %{"value" => "bar"}}
+      {:ok, %{"data" => %{"value" => "bar"}}}
   """
   def read(key, auth_method, credentials, timeout \\ 5000) do
     response = read(key, timeout)
