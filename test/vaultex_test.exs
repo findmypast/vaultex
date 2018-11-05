@@ -120,6 +120,13 @@ defmodule VaultexTest do
     assert Vaultex.Client.read("secret/foo/redirects", :app_id, {"good", "whatever"}) == {:ok, %{"data" => %{"value" => "bar"}}}
   end
 
+  test "Read of valid dynamic secret returns the correct value" do
+    assert Vaultex.Client.read("secret/dynamic/foo", :app_id, {"good", "whatever"}) == {:ok, %{"lease_id" => "secret/dynamic/foo/b4z",
+                                                                                              "lease_duration" => 60,
+                                                                                              "renewable" => true,
+                                                                                              "data" => %{"value" => "bar"}}}
+  end
+
   test "Read of non existing secret key returns error" do
     assert Vaultex.Client.read("secret/baz", :app_id, {"good", "whatever"}) == {:error, ["Key not found"]}
   end
