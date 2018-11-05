@@ -15,6 +15,13 @@ defmodule Vaultex.Test.TestDoubles.MockHTTPoison do
       url |> String.contains?("secret/foo") -> {:ok, %{status_code: status_code(url, url),
                                                       headers: [{"Location", redirect_url(url)}],
                                                       body: Poison.Encoder.encode(%{"data" => %{"value" => "bar"}},[])}}
+      url |> String.contains?("secret/dynamic/foo") -> {:ok, %{status_code: status_code(url, url),
+                                                       headers: [{"Location", redirect_url(url)}],
+                                                       body: Poison.Encoder.encode(%{"lease_id" => "secret/dynamic/foo/b4z",
+                                                                                    "lease_duration" => 60,
+                                                                                    "renewable" => true,
+                                                                                    "data" => %{"value" => "bar"}},[])}}
+      url |> String.contains?("secret/baz") -> {:ok, %{status_code: "whatever", body: Poison.Encoder.encode(%{"errors" => []},[])}}
       url |> String.contains?("secret/baz") -> {:ok, %{status_code: "whatever", body: Poison.Encoder.encode(%{"errors" => []},[])}}
       url |> String.contains?("secret/faz") -> {:ok, %{status_code: "whatever", body: Poison.Encoder.encode(%{"errors" => ["Not Authenticated"]},[])}}
       url |> String.contains?("secret/boom") -> {:error, %HTTPoison.Error{id: nil, reason: :econnrefused}}
