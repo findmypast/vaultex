@@ -66,21 +66,59 @@ defmodule Vaultex.Client do
   ## Examples
 
       iex> Vaultex.Client.read("secret/foobar", :approle, {role_id, secret_id}, 5000)
-      {:ok, %{"data" => %{"value" => "bar"}}}
+      {:ok, %{"value" => "bar"}}
 
       iex> Vaultex.Client.read("secret/foo", :app_id, {app_id, user_id})
-      {:ok, %{"data" => %{"value" => "bar"}}}
+      {:ok, %{"value" => "bar"}}
 
       iex> Vaultex.Client.read("secret/baz", :userpass, {username, password})
       {:error, ["Key not found"]}
 
       iex> Vaultex.Client.read("secret/bar", :github, {github_token})
-      {:ok, %{"data" => %{"value" => "bar"}}}
+      {:ok, %{"value" => "bar"}}
 
       iex> Vaultex.Client.read("secret/bar", :plugin_defined_auth, credentials)
-      {:ok, %{"data" => %{"value" => "bar"}}}
+      {:ok, %{"value" => "bar"}}
   """
   def read(key, auth_method, credentials, timeout \\ 5000) do
+    case read_resp(key, auth_method, credentials, timeout) do
+      {:ok, %{"data" => data}} -> {:ok, data}
+      not_okay -> not_okay
+    end
+  end
+
+  @doc """
+  Reads a dynamic secret from vault given a path and returns the secret along with lease information.
+
+  ## Parameters
+
+    - key: A String path to be used for querying vault.
+    - auth_method and credentials: See Vaultex.Client.auth
+    - timeout: A integer greater than zero which specifies how many milliseconds to wait for a reply
+
+  ## Examples
+
+      iex> Vaultex.Client.read_dynamic("secret/dynamic/foobar", :approle, {role_id, secret_id}, 5000)
+      {:ok, %{"data" => %{"value" => "bar"}, "lease_duration" => 60, "lease_id" => "secret/dynamic/foo/b4z", "renewable" => true}}
+
+      iex> Vaultex.Client.read_dynamic("secret/dynamic/foo", :app_id, {app_id, user_id})
+      {:ok, %{"data" => %{"value" => "bar"}, "lease_duration" => 60, "lease_id" => "secret/dynamic/foo/b4z", "renewable" => true}}
+
+      iex> Vaultex.Client.read_dynamic("secret/dynamic/baz", :userpass, {username, password})
+      {:error, ["Key not found"]}
+
+      iex> Vaultex.Client.read_dynamic("secret/dynamic/bar", :github, {github_token})
+      {:ok, %{"data" => %{"value" => "bar"}, "lease_duration" => 60, "lease_id" => "secret/dynamic/foo/b4z", "renewable" => true}}
+
+      iex> Vaultex.Client.read_dynamic("secret/dynamic/bar", :plugin_defined_auth, credentials)
+      {:ok, %{"data" => %{"value" => "bar"}, "lease_duration" => 60, "lease_id" => "secret/dynamic/foo/b4z", "renewable" => true}}
+  """
+  def read_dynamic(key, auth_method, credentials, timeout \\ 5000) do
+    read_resp(key, auth_method, credentials, timeout)
+  end
+
+
+  defp read_resp(key, auth_method, credentials, timeout) do
     response = read(key, timeout)
     case response do
       {:ok, _} -> response

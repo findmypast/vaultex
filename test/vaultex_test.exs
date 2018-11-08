@@ -109,19 +109,19 @@ defmodule VaultexTest do
   end
 
   test "Read of valid secret key returns the correct value" do
-    assert Vaultex.Client.read("secret/foo", :app_id, {"good", "whatever"}) == {:ok, %{"data" => %{"value" => "bar"}}}
+    assert Vaultex.Client.read("secret/foo", :app_id, {"good", "whatever"}) == {:ok, %{"value" => "bar"}}
   end
 
   test "Read of valid secret key with timeout returns the correct value" do
-    assert Vaultex.Client.read("secret/foo", :app_id, {"good", "whatever"}, 5000) == {:ok, %{"data" => %{"value" => "bar"}}}
+    assert Vaultex.Client.read("secret/foo", :app_id, {"good", "whatever"}, 5000) == {:ok, %{"value" => "bar"}}
   end
 
   test "Read of valid secret key requiring redirect returns the correct value" do
-    assert Vaultex.Client.read("secret/foo/redirects", :app_id, {"good", "whatever"}) == {:ok, %{"data" => %{"value" => "bar"}}}
+    assert Vaultex.Client.read("secret/foo/redirects", :app_id, {"good", "whatever"}) == {:ok, %{"value" => "bar"}}
   end
 
   test "Read of valid dynamic secret returns the correct value" do
-    assert Vaultex.Client.read("secret/dynamic/foo", :app_id, {"good", "whatever"}) == {:ok, %{"lease_id" => "secret/dynamic/foo/b4z",
+    assert Vaultex.Client.read_dynamic("secret/dynamic/foo", :app_id, {"good", "whatever"}) == {:ok, %{"lease_id" => "secret/dynamic/foo/b4z",
                                                                                               "lease_duration" => 60,
                                                                                               "renewable" => true,
                                                                                               "data" => %{"value" => "bar"}}}
