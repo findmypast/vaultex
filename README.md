@@ -75,7 +75,10 @@ iex> Vaultex.Client.auth(:kubernetes, %{jwt: "jwt", role: "role"})
 iex> Vaultex.Client.auth(:radius, %{username: "user", password: "password"})
 
 ...
-iex> Vaultex.Client.read "secret/bar", :github, {github_token} #returns {:ok, %{"data" => %{"value" => bar"}}}
+iex> Vaultex.Client.read "secret/bar", :github, {github_token} #returns {:ok, %{"value" => bar"}}
+
+...
+iex> Vaultex.Client.read_dynamic "secret/dynamic/bar", :github, {github_token} #returns {:ok, %{"data" => %{"value" => "bar"}, "lease_duration" => 60, "lease_id" => "secret/dynamic/foo/b4z", "renewable" => true}}
 
 ...
 iex> Vaultex.Client.write "secret/foo", %{"value" => "bar"}, :app_id, {app_id, user_id}
