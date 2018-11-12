@@ -1,5 +1,8 @@
 # Changelog
 
+## 0.10.0
+* Add support for read dynamic secrets
+
 ## 0.9.0
 * Added delete key feature
 
