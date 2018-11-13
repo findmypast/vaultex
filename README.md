@@ -81,6 +81,9 @@ iex> Vaultex.Client.read "secret/bar", :github, {github_token} #returns {:ok, %{
 iex> Vaultex.Client.read_dynamic "secret/dynamic/bar", :github, {github_token} #returns {:ok, %{"data" => %{"value" => "bar"}, "lease_duration" => 60, "lease_id" => "secret/dynamic/foo/b4z", "renewable" => true}}
 
 ...
+iex> Vaultex.Client.renew_lease("secret/dynamic/foo/b4z", 100, :github, {github_token}) #returns {:ok, %{"lease_id" => "secret/dynamic/foo/b4z", "lease_duration" => 160, "renewable" => true}}
+
+...
 iex> Vaultex.Client.write "secret/foo", %{"value" => "bar"}, :app_id, {app_id, user_id}
 
 ...
