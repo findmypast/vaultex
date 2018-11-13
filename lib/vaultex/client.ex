@@ -8,6 +8,7 @@ defmodule Vaultex.Client do
   alias Vaultex.Read, as: Read
   alias Vaultex.Write, as: Write
   alias Vaultex.Delete, as: Delete
+  alias Vaultex.Leases, as: Leases
   @version "v1"
 
   def start_link() do
@@ -133,6 +134,36 @@ defmodule Vaultex.Client do
   end
 
   @doc """
+  Renews a lease for a dynamic secret
+
+  ## Parameters
+
+    - lease_id: A String that is the lease ID returned when reading a dynamic secret
+    - increment: An Integer that represents the time in seconds to extend the lease by
+    - auth_method and credentials: See Vaultex.Client.auth
+    - timeout: A integer greater than zero which specifies how many milliseconds to wait for a reply
+
+  ## Examples
+
+      iex> Vaultex.Client.renew_lease("secret/dynamic/foo/b4z", 100, :app_role, {role_id, secret_id}, 5000)
+      {:ok, %{"lease_id" => "secret/dynamic/foo/b4z", "lease_duration" => 160, "renewable" => true}}
+  """
+
+  def renew_lease(lease_id, increment, auth_method, credentials, timeout \\ 5000) do
+    response = renew_lease(lease_id, increment, timeout)
+    case response do
+      {:ok, _} -> response
+      {:error, _} ->
+        with {:ok, _} <- auth(auth_method, credentials, timeout),
+          do: renew_lease(lease_id, increment, timeout)
+    end
+  end
+
+  defp renew_lease(lease_id, increment, timeout) do
+    GenServer.call(:vaultex, {:renew, lease_id, increment}, timeout)
+  end
+
+  @doc """
   Writes a secret to Vault given a path.
 
   ## Parameters
@@ -198,6 +229,10 @@ defmodule Vaultex.Client do
 
   def handle_call({:read, key}, _from, state) do
     Read.handle(key, state)
+  end
+
+  def handle_call({:renew, lease_id, increment}, _from, state) do
+    Leases.handle(:renew, lease_id, increment, state)
   end
 
   def handle_call({:write, key, value}, _from, state) do

@@ -32,6 +32,9 @@ defmodule Vaultex.Test.TestDoubles.MockHTTPoison do
   def request(:put, url, _params, _, _) do
     cond do
       String.ends_with?(url, "secret/foo/withresponse") -> {:ok, %{status_code: 200, body: Poison.Encoder.encode(%{"data" => %{"value" => "bar"}},[])}}
+      String.contains?(url, "sys/leases/renew") -> {:ok, %{status_code: 200, body: Poison.Encoder.encode(%{"lease_id" => "secret/dynamic/foo/b4z",
+                                                                                                          "lease_duration" => 160,
+                                                                                                          "renewable" => true},[])}}
       String.ends_with?(url, "secret/foo") -> {:ok, %{status_code: 204, body: ""}}
       String.ends_with?(url, "secret/foo/redirects") -> {:ok, %{status_code: 307, body: "", headers: [{"Location", "secret/foo"}]}}
       :else -> raise "Unmatched url #{url}"
