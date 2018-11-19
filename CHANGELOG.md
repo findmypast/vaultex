@@ -1,5 +1,8 @@
 # Changelog
 
+## 0.11.0
+* Add support for renewing lease
+
 ## 0.10.0
 * Add support for read dynamic secrets
 
