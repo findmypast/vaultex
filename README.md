@@ -52,6 +52,8 @@ These default to `localhost`, `8200`, `http` respectively.
 You can skip SSL certificate verification with `:vaultex, vault_ssl_verify: true` option
 or `VAULT_SSL_VERIFY=true` environment variable.  
 
+If you do want to use SSL verification, set the `VAULT_CACERT` environment variable to the SSL certificate location.  (See the [Vault documentaion](https://www.vaultproject.io/docs/commands/#vault_cacert) for more details.)
+
 ## Usage
 
 To read a secret you must provide the path to the secret and the authentication backend and credentials you will use to login. See the [Vaultex.Client.auth/2](https://hexdocs.pm/vaultex/Vaultex.Client.html#auth/2) docs for supported auth backends.

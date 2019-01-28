@@ -44,7 +44,7 @@ defmodule Vaultex.RedirectableRequests do
   end
 
   defp certificate_path do
-    System.get_env("SSL_CERT_FILE")
+   System.get_env("VAULT_CACERT") || System.get_env("SSL_CERT_FILE")
   end
 
 end
