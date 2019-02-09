@@ -30,7 +30,7 @@ defmodule Vaultex.Client do
 
   ## Examples
 
-      iex> Vaultex.Client.auth(:approle {role_id, secret_id}, 5000)
+      iex> Vaultex.Client.auth(:approle, {role_id, secret_id}, 5000)
       {:ok, :authenticated}
 
       iex> Vaultex.Client.auth(:app_id, {app_id, user_id})
