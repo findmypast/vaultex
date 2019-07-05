@@ -26,6 +26,18 @@ defmodule VaultexTest do
     assert Vaultex.Client.auth(:app_id, {"boom", "whatever"}) == {:error, ["Bad response from vault [http://localhost:8200/v1/]", :econnrefused]}
   end
 
+  test "Authentication of aws_iam is successful" do
+    assert Vaultex.Client.auth(:aws_iam, {"good", "whatever"}) == {:ok, :authenticated}
+  end
+
+  test "Authentication of aws_iam is unsuccessful" do
+    assert Vaultex.Client.auth(:aws_iam, {"bad", "whatever"}) == {:error, ["Not Authenticated"]}
+  end
+
+  test "Authentication of aws_iam causes exception" do
+    assert Vaultex.Client.auth(:aws_iam, {"boom", "explosion!"}) == {:error, ["Bad response from vault [http://localhost:8200/v1/]", :econnrefused]}
+  end
+
   test "Authentication of userpass is successful" do
     assert Vaultex.Client.auth(:userpass, {"user", "good"}) == {:ok, :authenticated}
   end
