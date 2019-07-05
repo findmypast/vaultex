@@ -7,6 +7,10 @@ defmodule Vaultex.Auth do
     handle(:app_id, %{app_id: app_id, user_id: user_id}, state)
   end
 
+  def handle(:aws_iam, {role, server}, state) do
+    handle(:aws, Vaultex.Auth.AWSIAM.credentials(role, server), state)
+  end
+
   def handle(:userpass, {username, password}, state) do
     handle(:userpass, %{username: username, password: password}, state)
   end

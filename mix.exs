@@ -33,6 +33,7 @@ defmodule Vaultex.Mixfile do
     [{:httpoison, "~> 1.0"},
     {:poison, "~> 3.1"},
     {:eliver, "~> 2.0"},
+    {:ex_aws, "~> 2.0", optional: true},
     {:ex_doc, ">= 0.0.0", only: :dev}]
   end
 

@@ -76,6 +76,8 @@ iex> Vaultex.Client.auth(:kubernetes, %{jwt: "jwt", role: "role"})
 
 iex> Vaultex.Client.auth(:radius, %{username: "user", password: "password"})
 
+iex> Vaultex.Client.auth(:aws_iam, {role, server})
+
 ...
 iex> Vaultex.Client.read "secret/bar", :github, {github_token} #returns {:ok, %{"value" => bar"}}
 
@@ -92,6 +94,12 @@ iex> Vaultex.Client.write "secret/foo", %{"value" => "bar"}, :app_id, {app_id, u
 iex> Vaultex.Client.delete "secret/foo", :app_id, {app_id, user_id}
 
 ```
+## Notes for `aws_iam` method
+
+The AWS IAM authentication method requires you to have [ExAws](https://github.com/ex-aws/ex_aws) installed as a dependency and correctly configured. No additional ExAws modules are required. For more details see the [Vault AWS docs](https://www.vaultproject.io/docs/auth/aws.html).
+
+* If `role` id set to `nil` Vault will try to infer the vault role to use.
+* `server` may be set to `nil` or to the value to pass in the `X-Vault-AWS-IAM-Server-ID` header.
 
 ## Releasing
 
