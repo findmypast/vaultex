@@ -1,5 +1,8 @@
 # Changelog
 
+## 0.12.0
+* AWS IAM authentication support
+
 ## 0.11.1
 * Add VAULT_CACERT support
 
