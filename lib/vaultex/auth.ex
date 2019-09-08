@@ -11,6 +11,10 @@ defmodule Vaultex.Auth do
     handle(:aws, Vaultex.Auth.AWSIAM.credentials(role, server), state)
   end
 
+  def handle(:aws_instance, {role, server}, state) do
+    handle(:aws, Vaultex.Auth.AWSInstanceRole.credentials(role, server), state)
+  end
+
   def handle(:userpass, {username, password}, state) do
     handle(:userpass, %{username: username, password: password}, state)
   end
