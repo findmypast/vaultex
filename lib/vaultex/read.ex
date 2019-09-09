@@ -22,6 +22,7 @@ defmodule Vaultex.Read do
   end
 
   defp request(method, url, params = %{}, headers) do
+    IO.inspect("Vaultex request: #{method} #{inspect(url)} #{inspect(params)}")
     Vaultex.RedirectableRequests.request(method, url, params, headers)
   end
 end
