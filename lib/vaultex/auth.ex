@@ -16,7 +16,16 @@ defmodule Vaultex.Auth do
   end
 
   def handle(:aws_instance, {role, _server}, state) do
-    nonce = UUID.uuid4()
+    nonce = 
+      case File.read(".nonce") do
+        {:ok, nonce} ->
+          nonce
+        {:error, _} ->
+          n = UUID.uuid4()
+          File.write(".nonce", n)
+          n
+      end
+    
     handle(:aws, Vaultex.Auth.AWSInstanceRole.credentials(role, nonce), Map.put(state, :nonce, nonce))
   end
 
