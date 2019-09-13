@@ -11,8 +11,13 @@ defmodule Vaultex.Auth do
     handle(:aws, Vaultex.Auth.AWSIAM.credentials(role, server), state)
   end
 
-  def handle(:aws_instance, {role, server}, state) do
-    handle(:aws, Vaultex.Auth.AWSInstanceRole.credentials(role, server), state)
+  def handle(:aws_instance, {role, _server}, %{nonce: nonce} = state) do
+    handle(:aws, Vaultex.Auth.AWSInstanceRole.credentials(role, nonce), state)
+  end
+
+  def handle(:aws_instance, {role, _server}, state) do
+    nonce = UUID.uuid4()
+    handle(:aws, Vaultex.Auth.AWSInstanceRole.credentials(role, nonce), Map.put(state, :nonce, nonce))
   end
 
   def handle(:userpass, {username, password}, state) do

@@ -16,7 +16,7 @@ defmodule Vaultex.Mixfile do
   #
   # Type "mix help compile.app" for more information
   def application do
-    [applications: [:logger, :httpoison],
+    [applications: [:logger, :httpoison, :uuid],
      mod: {Vaultex, []}]
   end
 
@@ -32,6 +32,7 @@ defmodule Vaultex.Mixfile do
   defp deps do
     [{:httpoison, "~> 1.0"},
     {:poison, "~> 3.1"},
+    {:uuid, "~> 1.1"},
     {:eliver, "~> 2.0"},
     {:ex_aws, "~> 2.0", optional: true},
     {:ex_doc, ">= 0.0.0", only: :dev}]
