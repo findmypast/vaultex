@@ -19,13 +19,16 @@ defmodule Vaultex.Auth do
     nonce = 
       case File.read(".nonce") do
         {:ok, nonce} ->
+          IO.inspect("found from file")
           nonce
         {:error, _} ->
           n = UUID.uuid4()
           File.write(".nonce", n)
+          IO.inspect("making new nonce: #{n}")
           n
       end
     
+    IO.inspect("HAVE NONCE: #{nonce}")
     handle(:aws, Vaultex.Auth.AWSInstanceRole.credentials(role, nonce), Map.put(state, :nonce, nonce))
   end
 
