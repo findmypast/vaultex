@@ -52,6 +52,7 @@ defmodule Vaultex.Client do
   @spec auth(method :: :token, credentials :: {token :: String.t}, timeout :: String.t | nil) :: {:ok, :authenticated}
   @spec auth(method :: atom, credentials :: map) :: {:ok | :error, any}
   def auth(method, credentials, timeout \\ 5000) do
+    IO.inspect("DOING AUTH WITH: #{method} #{inspect(credentials)}")
     GenServer.call(:vaultex, {:auth, method, credentials}, timeout)
   end
 

@@ -12,6 +12,7 @@ defmodule Vaultex.Auth do
   end
 
   def handle(:aws_instance, {role, _server}, %{nonce: nonce} = state) do
+    IO.inspect("ABOUT TO DO AUTH")
     handle(:aws, Vaultex.Auth.AWSInstanceRole.credentials(role, nonce), state)
   end
 
