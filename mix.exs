@@ -31,7 +31,7 @@ defmodule Vaultex.Mixfile do
   # Type "mix help deps" for more examples and options
   defp deps do
     [{:httpoison, "~> 1.0"},
-    {:poison, "~> 3.1"},
+    {:poison, "~> 3.1 or ~> 4.0"},
     {:eliver, "~> 2.0"},
     {:ex_aws, "~> 2.0", optional: true},
     {:ex_doc, ">= 0.0.0", only: :dev}]
