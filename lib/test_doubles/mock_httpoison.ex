@@ -1,9 +1,8 @@
 defmodule Vaultex.Test.TestDoubles.MockHTTPoison do
 
   def request(:post, url, params, _, _) do
-    stringified_params = List.to_string params
-    status_code = status_code(url, stringified_params)
-    vault_response(stringified_params, status_code, url)
+    status_code = status_code(url, params)
+    vault_response(params, status_code, url)
   end
 
   def request(:get, url, _params, [{"X-Vault-Token", token}, {"Content-Type", "application/json"}], _opts) do
@@ -14,16 +13,16 @@ defmodule Vaultex.Test.TestDoubles.MockHTTPoison do
     cond do
       url |> String.contains?("secret/foo") -> {:ok, %{status_code: status_code(url, url),
                                                       headers: [{"Location", redirect_url(url)}],
-                                                      body: Poison.Encoder.encode(%{"data" => %{"value" => "bar"}},[])}}
+                                                      body: Poison.encode!(%{"data" => %{"value" => "bar"}},[])}}
       url |> String.contains?("secret/dynamic/foo") -> {:ok, %{status_code: status_code(url, url),
                                                        headers: [{"Location", redirect_url(url)}],
-                                                       body: Poison.Encoder.encode(%{"lease_id" => "secret/dynamic/foo/b4z",
+                                                       body: Poison.encode!(%{"lease_id" => "secret/dynamic/foo/b4z",
                                                                                     "lease_duration" => 60,
                                                                                     "renewable" => true,
                                                                                     "data" => %{"value" => "bar"}},[])}}
-      url |> String.contains?("secret/baz") -> {:ok, %{status_code: "whatever", body: Poison.Encoder.encode(%{"errors" => []},[])}}
-      url |> String.contains?("secret/baz") -> {:ok, %{status_code: "whatever", body: Poison.Encoder.encode(%{"errors" => []},[])}}
-      url |> String.contains?("secret/faz") -> {:ok, %{status_code: "whatever", body: Poison.Encoder.encode(%{"errors" => ["Not Authenticated"]},[])}}
+      url |> String.contains?("secret/baz") -> {:ok, %{status_code: "whatever", body: Poison.encode!(%{"errors" => []},[])}}
+      url |> String.contains?("secret/baz") -> {:ok, %{status_code: "whatever", body: Poison.encode!(%{"errors" => []},[])}}
+      url |> String.contains?("secret/faz") -> {:ok, %{status_code: "whatever", body: Poison.encode!(%{"errors" => ["Not Authenticated"]},[])}}
       url |> String.contains?("secret/boom") -> {:error, %HTTPoison.Error{id: nil, reason: :econnrefused}}
       :else -> {:ok, %{} }
     end
@@ -31,8 +30,8 @@ defmodule Vaultex.Test.TestDoubles.MockHTTPoison do
 
   def request(:put, url, _params, _, _) do
     cond do
-      String.ends_with?(url, "secret/foo/withresponse") -> {:ok, %{status_code: 200, body: Poison.Encoder.encode(%{"data" => %{"value" => "bar"}},[])}}
-      String.contains?(url, "sys/leases/renew") -> {:ok, %{status_code: 200, body: Poison.Encoder.encode(%{"lease_id" => "secret/dynamic/foo/b4z",
+      String.ends_with?(url, "secret/foo/withresponse") -> {:ok, %{status_code: 200, body: Poison.encode!(%{"data" => %{"value" => "bar"}},[])}}
+      String.contains?(url, "sys/leases/renew") -> {:ok, %{status_code: 200, body: Poison.encode!(%{"lease_id" => "secret/dynamic/foo/b4z",
                                                                                                           "lease_duration" => 160,
                                                                                                           "renewable" => true},[])}}
       String.ends_with?(url, "secret/foo") -> {:ok, %{status_code: 204, body: ""}}
@@ -49,9 +48,9 @@ defmodule Vaultex.Test.TestDoubles.MockHTTPoison do
     cond do
       url |> String.contains?("secret/foo") -> {:ok, %{status_code: 204,
                                                       headers: [{"Location", redirect_url(url)}],
-                                                      body: Poison.Encoder.encode(%{},[])}}
-      url |> String.contains?("secret/baz") -> {:ok, %{status_code: 204, body: Poison.Encoder.encode(%{"errors" => []},[])}}
-      url |> String.contains?("secret/faz") -> {:ok, %{status_code: 204, body: Poison.Encoder.encode(%{"errors" => ["Not Authenticated"]},[])}}
+                                                      body: Poison.encode!(%{},[])}}
+      url |> String.contains?("secret/baz") -> {:ok, %{status_code: 204, body: Poison.encode!(%{"errors" => []},[])}}
+      url |> String.contains?("secret/faz") -> {:ok, %{status_code: 204, body: Poison.encode!(%{"errors" => ["Not Authenticated"]},[])}}
       url |> String.contains?("secret/boom") -> {:error, %HTTPoison.Error{id: nil, reason: :econnrefused}}
       :else -> {:ok, %{} }
     end
@@ -61,10 +60,10 @@ defmodule Vaultex.Test.TestDoubles.MockHTTPoison do
     cond do
       key |> String.contains?("good") -> {:ok, %{status_code: status_code,
                                                  headers: [{"Location", redirect_url(url)}],
-                                                 body: Poison.Encoder.encode(%{"auth" => %{"client_token" => "mytoken"}}, [])}}
+                                                 body: Poison.encode!(%{"auth" => %{"client_token" => "mytoken"}}, [])}}
       key |> String.contains?("boom") -> {:error, %HTTPoison.Error{id: nil, reason: :econnrefused}}
       key |> String.contains?("ssl") -> {:error, %HTTPoison.Error{id: nil, reason: {:tls_alert, 'unknown ca'}}}
-      :else -> {:ok, %{body: Poison.Encoder.encode(%{errors: ["Not Authenticated"] }, [])}}
+      :else -> {:ok, %{body: Poison.encode!(%{errors: ["Not Authenticated"] }, [])}}
     end
   end
 
