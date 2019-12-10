@@ -1,5 +1,8 @@
 # Changelog
 
+## 0.12.1
+* Update to use Poison 4.x
+
 ## 0.12.0
 * AWS IAM authentication support
 
