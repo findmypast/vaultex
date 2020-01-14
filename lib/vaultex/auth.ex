@@ -17,6 +17,8 @@ defmodule Vaultex.Auth do
   end
 
   def handle(:aws_instance, {role, nonce_path}, state) do
+    IO.inspect("READING FROM PATH: #{inspect(nonce_path)}")
+
     nonce =
       case File.read("#{nonce_path}.nonce") do
         {:ok, nonce} ->
