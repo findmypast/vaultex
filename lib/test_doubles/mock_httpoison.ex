@@ -20,6 +20,7 @@ defmodule Vaultex.Test.TestDoubles.MockHTTPoison do
                                                                                     "lease_duration" => 60,
                                                                                     "renewable" => true,
                                                                                     "data" => %{"value" => "bar"}},[])}}
+      url |> String.contains?("secret/coffee") -> {:ok, %{status_code: 404, body: Poison.encode!(%{warnings: ["bad path"]})}}
       url |> String.contains?("secret/baz") -> {:ok, %{status_code: "whatever", body: Poison.encode!(%{"errors" => []},[])}}
       url |> String.contains?("secret/baz") -> {:ok, %{status_code: "whatever", body: Poison.encode!(%{"errors" => []},[])}}
       url |> String.contains?("secret/faz") -> {:ok, %{status_code: "whatever", body: Poison.encode!(%{"errors" => ["Not Authenticated"]},[])}}
