@@ -143,6 +143,10 @@ defmodule VaultexTest do
     assert Vaultex.Client.read("secret/baz", :app_id, {"good", "whatever"}) == {:error, ["Key not found"]}
   end
 
+  test "Read of secret v2 key at v1 path returns warning" do
+    assert Vaultex.Client.read("secret/coffee", :app_id, {"good", "whatever"}) == {:ok, %{"warnings" => ["bad path"]}}
+  end
+
   test "Read of a secret key given bad authentication returns error" do
     assert Vaultex.Client.read("secret/faz", :app_id, {"bad", "whatever"}) == {:error, ["Not Authenticated"]}
   end

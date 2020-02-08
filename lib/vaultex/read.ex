@@ -8,11 +8,11 @@ defmodule Vaultex.Read do
     {:reply, {:error, ["Not Authenticated"]}, state}
   end
 
-
   defp handle_response({:ok, response}, state) do
     case response.body |> Poison.decode!() do
       %{"errors" => []} -> {:reply, {:error, ["Key not found"]}, state}
       %{"errors" => messages} -> {:reply, {:error, messages}, state}
+      %{"warnings" => messages} -> {:reply, {:ok, %{"warnings" => messages}}, state}
       parsed_resp -> {:reply, {:ok, parsed_resp}, state}
     end
   end
