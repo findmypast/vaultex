@@ -1,5 +1,8 @@
 # Changelog
 
+## 0.12.2
+* Ensure warnings are exposed in the response
+
 ## 0.12.1
 * Update to use Poison 4.x
 
