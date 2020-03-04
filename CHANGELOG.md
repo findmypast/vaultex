@@ -1,5 +1,8 @@
 # Changelog
 
+## 0.12.3
+* poison should be listed as runtime dependency
+
 ## 0.12.2
 * Ensure warnings are exposed in the response
 
