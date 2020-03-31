@@ -10,7 +10,7 @@ defmodule Vaultex.Read do
 
 
   defp handle_response({:ok, response}, state) do
-    case response.body |> Poison.Parser.parse! do
+    case response.body |> Jason.decode! do
       %{"errors" => []} -> {:reply, {:error, ["Key not found"]}, state}
       %{"errors" => messages} -> {:reply, {:error, messages}, state}
       parsed_resp -> {:reply, {:ok, parsed_resp}, state}

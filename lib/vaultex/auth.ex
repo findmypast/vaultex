@@ -80,7 +80,7 @@ defmodule Vaultex.Auth do
   end
 
   defp handle_response({:ok, response}, state) do
-    case response.body |> Poison.Parser.parse!() do
+    case response.body |> Jason.decode!() do
       %{"errors" => messages} ->
         {:reply, {:error, messages}, state}
 

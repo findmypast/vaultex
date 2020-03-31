@@ -6,7 +6,7 @@ defmodule Vaultex.RedirectableRequests do
   def request(method, url, params = %{}, headers, options \\ []) do
     options = if ssl_skip_verify?(), do: [{:hackney, [:insecure]} | options], else: options
     options = if certificate_path(), do: [{:ssl, [cacertfile: certificate_path()]} | options], else: options
-    @httpoison.request(method, url, Poison.Encoder.encode(params, []), headers, options)
+    @httpoison.request(method, url, Jason.Encoder.encode(params, []), headers, options)
     |> follow_redirect(method, params, headers)
   end
 
