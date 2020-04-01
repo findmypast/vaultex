@@ -22,7 +22,7 @@ defmodule Vaultex.Test.TestDoubles.MockHTTPoison do
          %{
            status_code: status_code(url, url),
            headers: [{"Location", redirect_url(url)}],
-           body: Jason.Encoder.encode(%{"data" => %{"value" => "bar"}}, [])
+           body: Jason.encode(%{"data" => %{"value" => "bar"}}, [])
          }}
 
       url |> String.contains?("secret/dynamic/foo") ->
@@ -31,7 +31,7 @@ defmodule Vaultex.Test.TestDoubles.MockHTTPoison do
            status_code: status_code(url, url),
            headers: [{"Location", redirect_url(url)}],
            body:
-             Jason.Encoder.encode(
+             Jason.encode(
                %{
                  "lease_id" => "secret/dynamic/foo/b4z",
                  "lease_duration" => 60,
@@ -43,16 +43,16 @@ defmodule Vaultex.Test.TestDoubles.MockHTTPoison do
          }}
 
       url |> String.contains?("secret/baz") ->
-        {:ok, %{status_code: "whatever", body: Jason.Encoder.encode(%{"errors" => []}, [])}}
+        {:ok, %{status_code: "whatever", body: Jason.encode(%{"errors" => []}, [])}}
 
       url |> String.contains?("secret/baz") ->
-        {:ok, %{status_code: "whatever", body: Jason.Encoder.encode(%{"errors" => []}, [])}}
+        {:ok, %{status_code: "whatever", body: Jason.encode(%{"errors" => []}, [])}}
 
       url |> String.contains?("secret/faz") ->
         {:ok,
          %{
            status_code: "whatever",
-           body: Jason.Encoder.encode(%{"errors" => ["Not Authenticated"]}, [])
+           body: Jason.encode(%{"errors" => ["Not Authenticated"]}, [])
          }}
 
       url |> String.contains?("secret/boom") ->
@@ -67,14 +67,14 @@ defmodule Vaultex.Test.TestDoubles.MockHTTPoison do
     cond do
       String.ends_with?(url, "secret/foo/withresponse") ->
         {:ok,
-         %{status_code: 200, body: Jason.Encoder.encode(%{"data" => %{"value" => "bar"}}, [])}}
+         %{status_code: 200, body: Jason.encode(%{"data" => %{"value" => "bar"}}, [])}}
 
       String.contains?(url, "sys/leases/renew") ->
         {:ok,
          %{
            status_code: 200,
            body:
-             Jason.Encoder.encode(
+             Jason.encode(
                %{
                  "lease_id" => "secret/dynamic/foo/b4z",
                  "lease_duration" => 160,
@@ -112,15 +112,15 @@ defmodule Vaultex.Test.TestDoubles.MockHTTPoison do
          %{
            status_code: 204,
            headers: [{"Location", redirect_url(url)}],
-           body: Jason.Encoder.encode(%{}, [])
+           body: Jason.encode(%{}, [])
          }}
 
       url |> String.contains?("secret/baz") ->
-        {:ok, %{status_code: 204, body: Jason.Encoder.encode(%{"errors" => []}, [])}}
+        {:ok, %{status_code: 204, body: Jason.encode(%{"errors" => []}, [])}}
 
       url |> String.contains?("secret/faz") ->
         {:ok,
-         %{status_code: 204, body: Jason.Encoder.encode(%{"errors" => ["Not Authenticated"]}, [])}}
+         %{status_code: 204, body: Jason.encode(%{"errors" => ["Not Authenticated"]}, [])}}
 
       url |> String.contains?("secret/boom") ->
         {:error, %HTTPoison.Error{id: nil, reason: :econnrefused}}
@@ -137,7 +137,7 @@ defmodule Vaultex.Test.TestDoubles.MockHTTPoison do
          %{
            status_code: status_code,
            headers: [{"Location", redirect_url(url)}],
-           body: Jason.Encoder.encode(%{"auth" => %{"client_token" => "mytoken"}}, [])
+           body: Jason.encode(%{"auth" => %{"client_token" => "mytoken"}}, [])
          }}
 
       key |> String.contains?("boom") ->
@@ -147,7 +147,7 @@ defmodule Vaultex.Test.TestDoubles.MockHTTPoison do
         {:error, %HTTPoison.Error{id: nil, reason: {:tls_alert, 'unknown ca'}}}
 
       :else ->
-        {:ok, %{body: Jason.Encoder.encode(%{errors: ["Not Authenticated"]}, [])}}
+        {:ok, %{body: Jason.encode(%{errors: ["Not Authenticated"]}, [])}}
     end
   end
 
