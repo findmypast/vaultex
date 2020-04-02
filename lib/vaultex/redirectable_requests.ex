@@ -11,7 +11,7 @@ defmodule Vaultex.RedirectableRequests do
         do: [{:ssl, [cacertfile: certificate_path()]} | options],
         else: options
 
-    @httpoison.request(method, url, Jason.encode(params, []), headers, options)
+    @httpoison.request(method, url, Jason.encode!(params, []), headers, options)
     |> follow_redirect(method, params, headers)
   end
 
