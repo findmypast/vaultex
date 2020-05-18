@@ -1,5 +1,8 @@
 # Changelog
 
+## 0.12.4
+* Updating ex_doc dependency to enable mix docs and in turn, mix hex.publish
+
 ## 0.12.3
 * poison should be listed as runtime dependency
 
