@@ -155,6 +155,14 @@ defmodule VaultexTest do
     assert Vaultex.Client.read("secret/coffee", :app_id, {"good", "whatever"}) == {:ok, %{"warnings" => ["bad path"]}}
   end
 
+  test "Read of a secret key given bad authentication returns error" do
+    assert Vaultex.Client.read("secret/faz", :app_id, {"bad", "whatever"}) == {:error, ["Not Authenticated"]}
+  end
+
+  test "Read of a secret key causes and exception" do
+    assert Vaultex.Client.read("secret/boom", :app_id, {"good", "whatever"}) == {:error, ["Bad response from vault [http://localhost:8200/v1/]", :econnrefused]}
+  end
+
   test "Renew a lease" do
     assert Vaultex.Client.renew_lease("secret/dynamic/foo/b4z", 100, :app_id, {"good", "whatever"}) == {:ok, %{"lease_id" => "secret/dynamic/foo/b4z",
                                                                         "lease_duration" => 160,
