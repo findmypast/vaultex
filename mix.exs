@@ -9,7 +9,9 @@ defmodule Vaultex.Mixfile do
      start_permanent: Mix.env == :prod,
      description: description(),
      package: package(),
-     deps: deps()]
+     deps: deps(),
+     test_coverage: [tool: ExCoveralls],
+     preferred_cli_env: [coveralls: :test, "coveralls.detail": :test, "coveralls.post": :test, "coveralls.html": :test]]
   end
 
   # Configuration for the OTP application
@@ -34,7 +36,8 @@ defmodule Vaultex.Mixfile do
     {:poison, "~> 3.1 or ~> 4.0"},
     {:eliver, "~> 2.0"},
     {:ex_aws, "~> 2.0", optional: true},
-    {:ex_doc, ">= 0.19.0", only: :dev}]
+    {:ex_doc, ">= 0.19.0", only: :dev},
+    {:excoveralls, "~> 0.10", only: :test}]
   end
 
   defp description do
