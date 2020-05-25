@@ -1,5 +1,8 @@
 # Changelog
 
+## 0.12.5
+* When reading from Vault, do not allow a nil errors or warnings value to hijack the response
+
 ## 0.12.4
 * Updating ex_doc dependency to enable mix docs and in turn, mix hex.publish
 
