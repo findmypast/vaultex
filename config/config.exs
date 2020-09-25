@@ -31,4 +31,4 @@ use Mix.Config
 
 config :vaultex, httpoison: HTTPoison
 
-import_config "#{Mix.env}.exs"
+import_config "#{Mix.env()}.exs"

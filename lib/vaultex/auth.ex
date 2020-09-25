@@ -1,4 +1,9 @@
 defmodule Vaultex.Auth do
+  require Logger
+  @moduledoc false
+
+  alias Vaultex.Auth.{AWSIAM, AWSInstanceRole}
+
   def handle(:approle, {role_id, secret_id}, state) do
     handle(:approle, %{role_id: role_id, secret_id: secret_id}, state)
   end
@@ -8,35 +13,35 @@ defmodule Vaultex.Auth do
   end
 
   def handle(:aws_iam, {role, server}, state) do
-    handle(:aws, Vaultex.Auth.AWSIAM.credentials(role, server), state)
+    handle(:aws, AWSIAM.credentials(role, server), state)
   end
 
-  def handle(:aws_instance, {role, _nonce_path}, %{nonce: nonce} = state) do
-    IO.inspect("ABOUT TO DO AUTH")
-    handle(:aws, Vaultex.Auth.AWSInstanceRole.credentials(role, nonce), state)
+  def handle(:aws_instance, {role, _nonce_path}, state = %{nonce: nonce}) do
+    Logger.debug("ABOUT TO DO AUTH")
+    handle(:aws, AWSInstanceRole.credentials(role, nonce), state)
   end
 
   def handle(:aws_instance, {role, nonce_path}, state) do
-    IO.inspect("READING FROM PATH: #{inspect(nonce_path)}")
+    Logger.debug("READING FROM PATH: #{inspect(nonce_path)}")
 
     nonce =
       case File.read("#{nonce_path}.nonce") do
         {:ok, nonce} ->
-          IO.inspect("found from file")
+          Logger.debug("found from file")
           nonce
 
         {:error, _} ->
           n = UUID.uuid4()
           File.write("#{nonce_path}.nonce", n)
-          IO.inspect("making new nonce: #{n}")
+          Logger.debug("making new nonce: #{n}")
           n
       end
 
-    IO.inspect("HAVE NONCE: #{nonce}")
+    Logger.debug("HAVE NONCE: #{nonce}")
 
     handle(
       :aws,
-      Vaultex.Auth.AWSInstanceRole.credentials(role, nonce),
+      AWSInstanceRole.credentials(role, nonce),
       Map.put(state, :nonce, nonce)
     )
   end
@@ -62,7 +67,7 @@ defmodule Vaultex.Auth do
   end
 
   # auth method with usernames are expected to call `POST auth/:method/login/:username`
-  def handle(method, %{username: username} = credentials, state) do
+  def handle(method, credentials = %{username: username}, state) do
     request(:post, "#{state.url}auth/#{method}/login/#{username}", credentials, [
       {"Content-Type", "application/json"}
     ])
@@ -71,7 +76,7 @@ defmodule Vaultex.Auth do
 
   # Generic login behavior for most methods
   def handle(method, credentials, state) when is_map(credentials) do
-    IO.inspect(credentials)
+    Logger.debug(credentials)
 
     request(:post, "#{state.url}auth/#{method}/login", credentials, [
       {"Content-Type", "application/json"}

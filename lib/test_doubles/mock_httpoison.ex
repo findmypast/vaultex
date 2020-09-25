@@ -1,4 +1,6 @@
 defmodule Vaultex.Test.TestDoubles.MockHTTPoison do
+  @moduledoc false
+
   def request(:post, url, params, _, _) do
     stringified_params = List.to_string(params)
     status_code = status_code(url, stringified_params)
@@ -66,8 +68,7 @@ defmodule Vaultex.Test.TestDoubles.MockHTTPoison do
   def request(:put, url, _params, _, _) do
     cond do
       String.ends_with?(url, "secret/foo/withresponse") ->
-        {:ok,
-         %{status_code: 200, body: Jason.encode(%{"data" => %{"value" => "bar"}}, [])}}
+        {:ok, %{status_code: 200, body: Jason.encode(%{"data" => %{"value" => "bar"}}, [])}}
 
       String.contains?(url, "sys/leases/renew") ->
         {:ok,
@@ -119,8 +120,7 @@ defmodule Vaultex.Test.TestDoubles.MockHTTPoison do
         {:ok, %{status_code: 204, body: Jason.encode(%{"errors" => []}, [])}}
 
       url |> String.contains?("secret/faz") ->
-        {:ok,
-         %{status_code: 204, body: Jason.encode(%{"errors" => ["Not Authenticated"]}, [])}}
+        {:ok, %{status_code: 204, body: Jason.encode(%{"errors" => ["Not Authenticated"]}, [])}}
 
       url |> String.contains?("secret/boom") ->
         {:error, %HTTPoison.Error{id: nil, reason: :econnrefused}}
