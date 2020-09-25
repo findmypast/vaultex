@@ -1,4 +1,6 @@
 defmodule Vaultex.RedirectableRequests do
+  @moduledoc false
+
   # Is there a better way to get the default HTTPoison value? When this library is consumed by a Client
   # the config files in Vaultex appear to be ignored.
   @httpoison Application.get_env(:vaultex, :httpoison) || HTTPoison
@@ -43,7 +45,7 @@ defmodule Vaultex.RedirectableRequests do
     {:ok, response}
   end
 
-  defp ssl_skip_verify?() do
+  defp ssl_skip_verify? do
     System.get_env("VAULT_SSL_VERIFY") ||
       System.get_env("SSL_SKIP_VERIFY") ||
       Application.get_env(:vaultex, :vault_ssl_verify) ||

@@ -37,7 +37,8 @@ defmodule Vaultex.Mixfile do
       {:uuid, "~> 1.1"},
       {:eliver, "~> 2.0"},
       {:ex_aws, "~> 2.0", optional: true},
-      {:ex_doc, ">= 0.0.0", only: :dev}
+      {:ex_doc, ">= 0.0.0", only: [:dev, :test]},
+      {:credo, "~> 1.4", only: [:dev, :test], runtime: false}
     ]
   end
 

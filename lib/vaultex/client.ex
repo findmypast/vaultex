@@ -1,17 +1,15 @@
 defmodule Vaultex.Client do
+  require Logger
+
   @moduledoc """
   Provides a functionality to authenticate and read from a vault endpoint.
   """
 
   use GenServer
-  alias Vaultex.Auth, as: Auth
-  alias Vaultex.Read, as: Read
-  alias Vaultex.Write, as: Write
-  alias Vaultex.Delete, as: Delete
-  alias Vaultex.Leases, as: Leases
+  alias Vaultex.{Auth, Delete, Leases, Read, Write}
   @version "v1"
 
-  def start_link() do
+  def start_link do
     GenServer.start_link(__MODULE__, %{progress: "starting"}, name: :vaultex)
   end
 
@@ -45,14 +43,31 @@ defmodule Vaultex.Client do
       iex> Vaultex.Client.auth(:jwt, %{jwt: jwt, role: role})
       {:ok, :authenticated}
   """
-  @spec auth(method :: :approle, credentials :: {role_id :: String.t, secret_id :: String.t}, timeout :: String.t | nil) :: {:ok | :error, any}
-  @spec auth(method :: :app_id, credentials :: {app_id :: String.t, user_id :: String.t}, timeout :: String.t | nil) :: {:ok | :error, any}
-  @spec auth(method :: :userpass, credentials :: {username :: String.t, password :: String.t}, timeout :: String.t | nil) :: {:ok | :error, any}
-  @spec auth(method :: :github, credentials :: {github_token :: String.t}, timeout :: String.t | nil) :: {:ok | :error, any}
-  @spec auth(method :: :token, credentials :: {token :: String.t}, timeout :: String.t | nil) :: {:ok, :authenticated}
+  @spec auth(
+          method :: :approle,
+          credentials :: {role_id :: String.t(), secret_id :: String.t()},
+          timeout :: String.t() | nil
+        ) :: {:ok | :error, any}
+  @spec auth(
+          method :: :app_id,
+          credentials :: {app_id :: String.t(), user_id :: String.t()},
+          timeout :: String.t() | nil
+        ) :: {:ok | :error, any}
+  @spec auth(
+          method :: :userpass,
+          credentials :: {username :: String.t(), password :: String.t()},
+          timeout :: String.t() | nil
+        ) :: {:ok | :error, any}
+  @spec auth(
+          method :: :github,
+          credentials :: {github_token :: String.t()},
+          timeout :: String.t() | nil
+        ) :: {:ok | :error, any}
+  @spec auth(method :: :token, credentials :: {token :: String.t()}, timeout :: String.t() | nil) ::
+          {:ok, :authenticated}
   @spec auth(method :: atom, credentials :: map) :: {:ok | :error, any}
   def auth(method, credentials, timeout \\ 5000) do
-    IO.inspect("DOING AUTH WITH: #{method} #{inspect(credentials)}")
+    Logger.debug("DOING AUTH WITH: #{method} #{inspect(credentials)}")
     GenServer.call(:vaultex, {:auth, method, credentials}, timeout)
   end
 
@@ -119,14 +134,16 @@ defmodule Vaultex.Client do
     read_resp(key, auth_method, credentials, timeout)
   end
 
-
   defp read_resp(key, auth_method, credentials, timeout) do
     response = read(key, timeout)
+
     case response do
-      {:ok, _} -> response
+      {:ok, _} ->
+        response
+
       {:error, _} ->
         with {:ok, _} <- auth(auth_method, credentials, timeout),
-          do: read(key, timeout)
+             do: read(key, timeout)
     end
   end
 
@@ -152,11 +169,14 @@ defmodule Vaultex.Client do
 
   def renew_lease(lease_id, increment, auth_method, credentials, timeout \\ 5000) do
     response = renew_lease(lease_id, increment, timeout)
+
     case response do
-      {:ok, _} -> response
+      {:ok, _} ->
+        response
+
       {:error, _} ->
         with {:ok, _} <- auth(auth_method, credentials, timeout),
-          do: renew_lease(lease_id, increment, timeout)
+             do: renew_lease(lease_id, increment, timeout)
     end
   end
 
@@ -184,12 +204,17 @@ defmodule Vaultex.Client do
   """
   def write(key, value, auth_method, credentials, timeout \\ 5000) do
     response = write(key, value, timeout)
+
     case response do
-      :ok -> response
-      {:ok, response} -> {:ok, response}
+      :ok ->
+        response
+
+      {:ok, response} ->
+        {:ok, response}
+
       {:error, _} ->
         with {:ok, _} <- auth(auth_method, credentials, timeout),
-          do: write(key, value, timeout)
+             do: write(key, value, timeout)
     end
   end
 
@@ -216,11 +241,14 @@ defmodule Vaultex.Client do
   """
   def delete(key, auth_method, credentials, timeout \\ 5000) do
     response = delete(key, timeout)
+
     case response do
-      :ok -> response
+      :ok ->
+        response
+
       {:error, _} ->
         with {:ok, _} <- auth(auth_method, credentials, timeout),
-          do: delete(key, timeout)
+             do: delete(key, timeout)
     end
   end
 
@@ -265,7 +293,7 @@ defmodule Vaultex.Client do
   end
 
   defp parsed_vault_addr do
-    get_env(:vault_addr) |> to_string |> URI.parse
+    get_env(:vault_addr) |> to_string |> URI.parse()
   end
 
   defp get_env(:host) do
@@ -273,11 +301,11 @@ defmodule Vaultex.Client do
   end
 
   defp get_env(:port) do
-      System.get_env("VAULT_PORT") || Application.get_env(:vaultex, :port) || 8200
+    System.get_env("VAULT_PORT") || Application.get_env(:vaultex, :port) || 8200
   end
 
   defp get_env(:scheme) do
-      System.get_env("VAULT_SCHEME") || Application.get_env(:vaultex, :scheme) || "http"
+    System.get_env("VAULT_SCHEME") || Application.get_env(:vaultex, :scheme) || "http"
   end
 
   defp get_env(:vault_addr) do

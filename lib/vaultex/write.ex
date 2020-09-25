@@ -1,4 +1,6 @@
 defmodule Vaultex.Write do
+  @moduledoc false
+
   def handle(key, value, state = %{token: token}) do
     request(:put, "#{state.url}#{key}", value, [
       {"Content-Type", "application/json"},
