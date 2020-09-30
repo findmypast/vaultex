@@ -1,57 +1,70 @@
 defmodule Vaultex.Mixfile do
   use Mix.Project
 
+  @version String.trim(File.read!("VERSION"))
+  @source_url "https://github.com/findmypast/vaultex"
+
   def project do
-    [app: :vaultex,
-     version: String.trim(File.read!("VERSION")),
-     elixir: "~> 1.5",
-     build_embedded: Mix.env == :prod,
-     start_permanent: Mix.env == :prod,
-     description: description(),
-     package: package(),
-     deps: deps(),
-     test_coverage: [tool: ExCoveralls],
-     preferred_cli_env: [coveralls: :test, "coveralls.detail": :test, "coveralls.post": :test, "coveralls.html": :test]]
+    [
+      app: :vaultex,
+      version: @version,
+      elixir: "~> 1.5",
+      build_embedded: Mix.env() == :prod,
+      start_permanent: Mix.env() == :prod,
+      description: description(),
+      docs: docs(),
+      package: package(),
+      deps: deps(),
+      test_coverage: [tool: ExCoveralls],
+      preferred_cli_env: [
+        coveralls: :test,
+        "coveralls.detail": :test,
+        "coveralls.post": :test,
+        "coveralls.html": :test
+      ]
+    ]
   end
 
-  # Configuration for the OTP application
-  #
-  # Type "mix help compile.app" for more information
   def application do
-    [extra_applications: [:logger, :httpoison, :poison],
-     mod: {Vaultex, []}]
+    [extra_applications: [:logger, :httpoison, :poison], mod: {Vaultex, []}]
   end
 
-  # Dependencies can be Hex packages:
-  #
-  #   {:mydep, "~> 0.3.0"}
-  #
-  # Or git/path repositories:
-  #
-  #   {:mydep, git: "https://github.com/elixir-lang/mydep.git", tag: "0.1.0"}
-  #
-  # Type "mix help deps" for more examples and options
   defp deps do
-    [{:httpoison, "~> 1.0"},
-    {:poison, "~> 3.1 or ~> 4.0"},
-    {:eliver, "~> 2.0"},
-    {:ex_aws, "~> 2.0", optional: true},
-    {:ex_doc, ">= 0.19.0", only: :dev},
-    {:excoveralls, "~> 0.10", only: :test}]
+    [
+      {:httpoison, "~> 1.0"},
+      {:poison, "~> 3.1 or ~> 4.0"},
+      {:eliver, "~> 2.0"},
+      {:ex_aws, "~> 2.0", optional: true},
+      {:ex_doc, ">= 0.22.0", only: :dev},
+      {:excoveralls, "~> 0.10", only: :test}
+    ]
   end
 
   defp description do
     """
-    A very simple read only client that authenticates and reads secrets from HashiCorp's Vault.
+    A very simple read only client that authenticates and reads secrets from
+    HashiCorp's Vault.
     """
   end
 
+  defp docs do
+    [
+      main: "readme",
+      source_ref: "v#{@version}",
+      source_url: @source_url,
+      extras: [
+        "README.md"
+      ]
+    ]
+  end
+
   defp package do
-    [# These are the default files included in the package
-     files: ["lib", "mix.exs", "README*", "VERSION", "CHANGELOG.md"],
-     maintainers: ["opensource@findmypast.com"],
-     licenses: ["Apache 2.0"],
-     links: %{"GitHub" => "https://github.com/findmypast/vaultex"}
+    # These are the default files included in the package
+    [
+      files: ["lib", "mix.exs", "README*", "VERSION", "CHANGELOG.md"],
+      maintainers: ["opensource@findmypast.com"],
+      licenses: ["Apache 2.0"],
+      links: %{"GitHub" => @source_url}
     ]
   end
 end
