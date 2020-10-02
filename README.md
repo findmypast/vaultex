@@ -1,4 +1,4 @@
-# Vaultex
+# :lock: Vaultex
 
 [![Hex.pm](https://img.shields.io/hexpm/v/vaultex.svg)](https://hex.pm/packages/vaultex)
 [![Hex.pm](https://img.shields.io/hexpm/dt/vaultex.svg)](https://hex.pm/packages/vaultex)
