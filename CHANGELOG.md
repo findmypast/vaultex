@@ -1,5 +1,8 @@
 # Changelog
 
+## 1.0.0
+* Adds HTML doc generation function, cleans up project config, and improves README. Updates ex_doc to version 0.22 which requires elixir 1.7+.
+
 ## 0.12.5
 * When reading from Vault, do not allow a nil errors or warnings value to hijack the response
 
