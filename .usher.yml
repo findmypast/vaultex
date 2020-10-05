@@ -1,5 +1,5 @@
 vars:
-  registry: docker-registry.dun.fh
+  registry: fh1-harbor01.dun.fh
   service_name: vaultex
 
 tasks:
