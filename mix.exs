@@ -4,7 +4,7 @@ defmodule Vaultex.Mixfile do
   def project do
     [
       app: :vaultex,
-      version: String.trim(File.read!("VERSION")),
+      version: "0.12.6",
       elixir: "~> 1.5",
       build_embedded: Mix.env() == :prod,
       start_permanent: Mix.env() == :prod,
@@ -51,7 +51,7 @@ defmodule Vaultex.Mixfile do
   defp package do
     # These are the default files included in the package
     [
-      files: ["lib", "mix.exs", "README*", "VERSION", "CHANGELOG.md"],
+      files: ["lib", "mix.exs", "README*", "CHANGELOG.md"],
       maintainers: ["opensource@findmypast.com"],
       licenses: ["Apache 2.0"],
       links: %{"GitHub" => "https://github.com/findmypast/vaultex"}
