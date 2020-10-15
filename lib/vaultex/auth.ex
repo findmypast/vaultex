@@ -76,7 +76,7 @@ defmodule Vaultex.Auth do
 
   # Generic login behavior for most methods
   def handle(method, credentials, state) when is_map(credentials) do
-    Logger.debug(credentials)
+    Logger.debug(inspect(credentials))
 
     request(:post, "#{state.url}auth/#{method}/login", credentials, [
       {"Content-Type", "application/json"}
