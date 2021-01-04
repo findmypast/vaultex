@@ -3,7 +3,6 @@ defmodule Vaultex.RedirectableRequests do
 
   # Is there a better way to get the default HTTPoison value? When this library is consumed by a Client
   # the config files in Vaultex appear to be ignored.
-  @httpoison Application.get_env(:vaultex, :httpoison) || HTTPoison
 
   def request(method, url, params = %{}, headers, options \\ []) do
     options = if ssl_skip_verify?(), do: [{:hackney, [:insecure]} | options], else: options
@@ -13,7 +12,7 @@ defmodule Vaultex.RedirectableRequests do
         do: [{:ssl, [cacertfile: certificate_path()]} | options],
         else: options
 
-    @httpoison.request(method, url, Jason.encode!(params, []), headers, options)
+    http_client().request(method, url, Jason.encode!(params, []), headers, options)
     |> follow_redirect(method, params, headers)
   end
 
@@ -54,5 +53,9 @@ defmodule Vaultex.RedirectableRequests do
 
   defp certificate_path do
     System.get_env("VAULT_CACERT") || System.get_env("SSL_CERT_FILE")
+  end
+
+  defp http_client do
+    Application.get_env(:vaultex, :httpoison) || HTTPoison
   end
 end
