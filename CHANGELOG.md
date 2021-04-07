@@ -1,5 +1,8 @@
 # Changelog
 
+## 1.0.1
+* Mark eliver as dev dependency
+
 ## 1.0.0
 * Adds HTML doc generation function, cleans up project config, and improves README. Updates ex_doc to version 0.22 which requires elixir 1.7+.
 
