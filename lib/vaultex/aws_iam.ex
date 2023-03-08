@@ -17,11 +17,12 @@ defmodule Vaultex.Auth.AWSIAM do
   end
 
   defp request_headers(server) do
-    base_headers = [
-      {"User-Agent", "ExAws"},
-      {"Content-Type", "application/x-www-form-urlencoded"}
-    ]
-    |> maybe_add_server(server)
+    base_headers =
+      [
+        {"User-Agent", "ExAws"},
+        {"Content-Type", "application/x-www-form-urlencoded"}
+      ]
+      |> maybe_add_server(server)
 
     config = ExAws.Config.new(:sts)
 
@@ -33,10 +34,12 @@ defmodule Vaultex.Auth.AWSIAM do
   end
 
   defp maybe_add_role(credentials, nil), do: credentials
+
   defp maybe_add_role(credentials, role),
     do: Map.put(credentials, :role, role)
 
   defp maybe_add_server(headers, nil), do: headers
+
   defp maybe_add_server(headers, server),
     do: [{"X-Vault-awsiam-Server-Id", server} | headers]
 end
