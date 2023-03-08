@@ -28,6 +28,6 @@ config :logger, :console, level: :info
 #
 #     import_config "#{Mix.env}.exs"
 
-config :vaultex, httpoison: HTTPoison
+# config :vaultex, httpoison: HTTPoison
 
 import_config "#{Mix.env()}.exs"
