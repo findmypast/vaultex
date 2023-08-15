@@ -160,7 +160,7 @@ defmodule Vaultex.Test.TestDoubles.MockHTTPoison do
         {:error, %HTTPoison.Error{id: nil, reason: :econnrefused}}
 
       key |> String.contains?("ssl") ->
-        {:error, %HTTPoison.Error{id: nil, reason: {:tls_alert, 'unknown ca'}}}
+        {:error, %HTTPoison.Error{id: nil, reason: {:tls_alert, ~c"unknown ca"}}}
 
       :else ->
         {:ok, %{body: Poison.encode!(%{errors: ["Not Authenticated"]}, [])}}

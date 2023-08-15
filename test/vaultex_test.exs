@@ -111,7 +111,10 @@ defmodule VaultexTest do
   test "Authentication of self signed ssl causes an exception" do
     assert Vaultex.Client.auth(:token, {"ssl"}) ==
              {:error,
-              ["Bad response from vault [http://localhost:8200/v1/]", {:tls_alert, 'unknown ca'}]}
+              [
+                "Bad response from vault [http://localhost:8200/v1/]",
+                {:tls_alert, ~c"unknown ca"}
+              ]}
   end
 
   test "Authentication of arbitrary method and credentials" do

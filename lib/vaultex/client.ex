@@ -11,7 +11,7 @@ defmodule Vaultex.Client do
   alias Vaultex.Leases, as: Leases
   @version "v1"
 
-  def start_link() do
+  def start_link(_) do
     GenServer.start_link(__MODULE__, %{progress: "starting"}, name: :vaultex)
   end
 
