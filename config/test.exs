@@ -1,4 +1,4 @@
-use Mix.Config
+import Config
 
 config :vaultex, httpoison: Vaultex.Test.TestDoubles.MockHTTPoison
 config :vaultex, app_id: "foo"
