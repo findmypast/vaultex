@@ -1,7 +1,11 @@
 defmodule Vaultex.Leases do
   def handle(:renew, lease, increment, state = %{token: token}) do
     body = %{"lease_id" => lease, "increment" => increment}
-    request(:put, "#{state.url}sys/leases/renew", body, [{"Content-Type", "application/json"}, {"X-Vault-Token", token}])
+
+    request(:put, "#{state.url}sys/leases/renew", body, [
+      {"Content-Type", "application/json"},
+      {"X-Vault-Token", token}
+    ])
     |> handle_response(state)
   end
 

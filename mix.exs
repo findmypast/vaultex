@@ -8,7 +8,7 @@ defmodule Vaultex.Mixfile do
     [
       app: :vaultex,
       version: @version,
-      elixir: "~> 1.5",
+      elixir: "~> 1.14",
       build_embedded: Mix.env() == :prod,
       start_permanent: Mix.env() == :prod,
       description: description(),
@@ -31,10 +31,10 @@ defmodule Vaultex.Mixfile do
 
   defp deps do
     [
-      {:httpoison, "~> 1.0"},
-      {:poison, "~> 3.1 or ~> 4.0"},
+      {:httpoison, "~>2.0"},
+      {:poison, "~> 3.1 or ~> 5.0"},
       {:eliver, "~> 2.0", only: :dev},
-      {:ex_aws, "~> 2.0", optional: true},
+      {:ex_aws, "~> 2.4", optional: true},
       {:ex_doc, ">= 0.22.0", only: :dev},
       {:excoveralls, "~> 0.10", only: :test}
     ]

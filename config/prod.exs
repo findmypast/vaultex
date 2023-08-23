@@ -1,3 +1,3 @@
-use Mix.Config
+import Config
 
 config :vaultex, httpoison: HTTPoison
