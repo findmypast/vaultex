@@ -1,5 +1,15 @@
 # Changelog
 
+## 2.0.0
+
+* fixed wrong header sent with AWS IAM scenarios
+* updated to Elixir 1.14 standards and formatting, per PR from lauragrechenko
+  * considering this a "breaking change" only because of the updated Elixir version
+    requirements
+* update all dependecies to latest versions as of 2023-08-23
+* removed unused dependencies from mix.lock
+* put notice in README about this fork
+
 ## 1.0.1
 * Mark eliver as dev dependency
 
