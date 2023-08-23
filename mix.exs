@@ -2,7 +2,7 @@ defmodule Vaultex.Mixfile do
   use Mix.Project
 
   @version String.trim(File.read!("VERSION"))
-  @source_url "https://github.com/findmypast/vaultex"
+  @source_url "https://github.com/Semsee/vaultex"
 
   def project do
     [
@@ -34,7 +34,7 @@ defmodule Vaultex.Mixfile do
       {:httpoison, "~>2.0"},
       {:poison, "~> 3.1 or ~> 5.0"},
       {:eliver, "~> 2.0", only: :dev},
-      {:ex_aws, "~> 2.4", optional: true},
+      {:ex_aws, "~> 2.5", optional: true},
       {:ex_doc, ">= 0.22.0", only: :dev},
       {:excoveralls, "~> 0.10", only: :test}
     ]
@@ -42,8 +42,9 @@ defmodule Vaultex.Mixfile do
 
   defp description do
     """
-    A very simple read only client that authenticates and reads secrets from
-    HashiCorp's Vault.
+    Fork of vaultex - a read-only client for HashiCorp's Vault.
+
+    Updated to fix bugs with IAM and requires Elixir >= 1.14.
     """
   end
 
