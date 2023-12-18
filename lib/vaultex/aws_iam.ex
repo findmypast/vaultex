@@ -41,5 +41,5 @@ defmodule Vaultex.Auth.AWSIAM do
   defp maybe_add_server(headers, nil), do: headers
 
   defp maybe_add_server(headers, server),
-    do: [{"X-Vault-awsiam-Server-Id", server} | headers]
+    do: [{"X-Vault-AWS-IAM-Server-Id", server} | headers]
 end

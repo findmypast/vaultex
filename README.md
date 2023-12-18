@@ -7,6 +7,10 @@ A very simple elixir client that authenticates, reads, writes, and deletes
 secrets from HashiCorp's Vault. As listed on [Vault
 Libraries](https://www.vaultproject.io/api/libraries.html#elixir).
 
+This is **fork** from the original vaultex library at
+[findmypast/vaultex](https://github.com/findmypast/vaultex), which appears to be abandoned
+by the author at this time.
+
 ## Installation
 
 The package can be installed as:
@@ -15,7 +19,7 @@ The package can be installed as:
 
 ```elixir
 def deps do
-  [{:vaultex, "~> 0.8"}]
+  [{:vaultex, "~> 2.0"}]
 end
 ```
 2) Ensure `vaultex` is started before your application:
