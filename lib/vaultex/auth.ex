@@ -33,21 +33,30 @@ defmodule Vaultex.Auth do
 
   # auth method with usernames are expected to call `POST auth/:method/login/:username`
   def handle(method, %{username: username} = credentials, state) do
-    request(:post, "#{state.url}auth/#{method}/login/#{username}", credentials, [{"Content-Type", "application/json"}])
+    request(:post, "#{state.url}auth/#{method}/login/#{username}", credentials, [
+      {"Content-Type", "application/json"}
+    ])
     |> handle_response(state)
   end
 
   # Generic login behavior for most methods
   def handle(method, credentials, state) when is_map(credentials) do
-    request(:post, "#{state.url}auth/#{method}/login", credentials, [{"Content-Type", "application/json"}])
+    request(:post, "#{state.url}auth/#{method}/login", credentials, [
+      {"Content-Type", "application/json"}
+    ])
     |> handle_response(state)
   end
 
   defp handle_response({:ok, response}, state) do
     case response.body |> Poison.decode!() do
-      %{"errors" => messages} -> {:reply, {:error, messages}, state}
-      %{"auth" => nil, "data" => data} -> {:reply, {:ok, :authenticated}, Map.merge(state, %{token: data["id"]})}
-      %{"auth" => properties} -> {:reply, {:ok, :authenticated}, Map.merge(state, %{token: properties["client_token"]})}
+      %{"errors" => messages} ->
+        {:reply, {:error, messages}, state}
+
+      %{"auth" => nil, "data" => data} ->
+        {:reply, {:ok, :authenticated}, Map.merge(state, %{token: data["id"]})}
+
+      %{"auth" => properties} ->
+        {:reply, {:ok, :authenticated}, Map.merge(state, %{token: properties["client_token"]})}
     end
   end
 
