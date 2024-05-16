@@ -1,11 +1,13 @@
 defmodule Vaultex.Mixfile do
   use Mix.Project
 
+  @version "0.12.7"
+
   def project do
     [
       app: :vaultex,
-      version: "0.12.7",
-      elixir: "~> 1.5",
+      version: @version,
+      elixir: "~> 1.16",
       build_embedded: Mix.env() == :prod,
       start_permanent: Mix.env() == :prod,
       description: description(),
@@ -32,11 +34,11 @@ defmodule Vaultex.Mixfile do
   # Type "mix help deps" for more examples and options
   defp deps do
     [
+      {:jason, "~> 1.4"},
       {:httpoison, "~> 1.0"},
-      {:jason, ">= 1.0.0"},
       {:uuid, "~> 1.1"},
-      {:eliver, "~> 2.0"},
       {:ex_aws, "~> 2.0", optional: true},
+      {:git_ops, "~> 2.2", only: [:dev, :test]},
       {:ex_doc, ">= 0.0.0", only: [:dev, :test]},
       {:credo, "~> 1.4", only: [:dev, :test], runtime: false}
     ]
