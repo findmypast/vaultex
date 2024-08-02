@@ -30,7 +30,7 @@ defmodule Vaultex.Auth.AWSIAM do
 
     headers
     |> Enum.into(%{})
-    |> Poison.encode!()
+    |> Jason.encode!()
   end
 
   defp maybe_add_role(credentials, nil), do: credentials
