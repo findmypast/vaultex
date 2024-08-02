@@ -1,5 +1,12 @@
 # Changelog
 
+## 2.1.0
+* Remove eliver, HTTPoison, and Poison as dependencies
+* Add Req as the module to make HTTP requests
+* Add Plug as a dev dependency for mocking requests
+* Rewrite all internals to use Req and Jason; public interface remains unchanged
+* Update all outdated mix packages
+
 ## 2.0.0
 
 * fixed wrong header sent with AWS IAM scenarios
