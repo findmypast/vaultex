@@ -1,9 +1,6 @@
 defmodule Vaultex.Write do
   def handle(key, value, state = %{token: token}) do
-    request(:put, "#{state.url}#{key}", value, [
-      {"Content-Type", "application/json"},
-      {"X-Vault-Token", token}
-    ])
+    request(:put, "#{state.url}#{key}", value, [{"x-vault-token", token}])
     |> handle_response(state)
   end
 
@@ -12,9 +9,9 @@ defmodule Vaultex.Write do
   end
 
   defp handle_response({:ok, response}, state) do
-    case response.status_code do
+    case response.status do
       200 ->
-        case response.body |> Poison.decode!() do
+        case response.body do
           %{"data" => data} -> {:reply, {:ok, data}, state}
           %{"errors" => []} -> {:reply, {:error, ["Key not found"]}, state}
           %{"errors" => messages} -> {:reply, {:error, messages}, state}
@@ -28,7 +25,13 @@ defmodule Vaultex.Write do
     end
   end
 
-  defp handle_response({_, %HTTPoison.Error{reason: reason}}, state) do
+  defp handle_response({:error, exception}, state) do
+    reason =
+      case exception do
+        %{reason: reason} -> reason
+        _ -> Exception.message(exception)
+      end
+
     {:reply, {:error, ["Bad response from vault [#{state.url}]", reason]}, state}
   end
 

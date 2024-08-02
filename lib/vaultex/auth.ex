@@ -1,4 +1,8 @@
 defmodule Vaultex.Auth do
+  @moduledoc """
+  Handles initial authentication to the Vault server.
+  """
+
   def handle(:approle, {role_id, secret_id}, state) do
     handle(:approle, %{role_id: role_id, secret_id: secret_id}, state)
   end
@@ -24,31 +28,24 @@ defmodule Vaultex.Auth do
   end
 
   def handle(:token, {token}, state) do
-    request(:get, "#{state.url}auth/token/lookup-self", %{}, [
-      {"X-Vault-Token", token},
-      {"Content-Type", "application/json"}
-    ])
+    request(:get, "#{state.url}auth/token/lookup-self", nil, [{"x-vault-token", token}])
     |> handle_response(state)
   end
 
   # auth method with usernames are expected to call `POST auth/:method/login/:username`
   def handle(method, %{username: username} = credentials, state) do
-    request(:post, "#{state.url}auth/#{method}/login/#{username}", credentials, [
-      {"Content-Type", "application/json"}
-    ])
+    request(:post, "#{state.url}auth/#{method}/login/#{username}", credentials, [])
     |> handle_response(state)
   end
 
   # Generic login behavior for most methods
   def handle(method, credentials, state) when is_map(credentials) do
-    request(:post, "#{state.url}auth/#{method}/login", credentials, [
-      {"Content-Type", "application/json"}
-    ])
+    request(:post, "#{state.url}auth/#{method}/login", credentials, [])
     |> handle_response(state)
   end
 
-  defp handle_response({:ok, response}, state) do
-    case response.body |> Poison.decode!() do
+  defp handle_response({:ok, %Req.Response{} = response}, state) do
+    case response.body do
       %{"errors" => messages} ->
         {:reply, {:error, messages}, state}
 
@@ -60,11 +57,17 @@ defmodule Vaultex.Auth do
     end
   end
 
-  defp handle_response({_, %HTTPoison.Error{reason: reason}}, state) do
+  defp handle_response({:error, exception}, state) do
+    reason =
+      case exception do
+        %{reason: reason} -> reason
+        _ -> Exception.message(exception)
+      end
+
     {:reply, {:error, ["Bad response from vault [#{state.url}]", reason]}, state}
   end
 
-  defp request(method, url, params = %{}, headers) do
+  defp request(method, url, params, headers) do
     Vaultex.RedirectableRequests.request(method, url, params, headers)
   end
 end

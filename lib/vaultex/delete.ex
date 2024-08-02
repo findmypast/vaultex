@@ -1,6 +1,6 @@
 defmodule Vaultex.Delete do
   def handle(key, state = %{token: token}) do
-    request(:delete, "#{state.url}#{key}", %{}, [{"X-Vault-Token", token}])
+    request(:delete, "#{state.url}#{key}", %{}, [{"x-vault-token", token}])
     |> handle_response(state)
   end
 
@@ -9,13 +9,19 @@ defmodule Vaultex.Delete do
   end
 
   defp handle_response({:ok, response}, state) do
-    case response.status_code do
+    case response.status do
       204 -> {:reply, :ok, state}
       error_code -> {:reply, {:error, error_code}, state}
     end
   end
 
-  defp handle_response({_, %HTTPoison.Error{reason: reason}}, state) do
+  defp handle_response({:error, exception}, state) do
+    reason =
+      case exception do
+        %{reason: reason} -> reason
+        _ -> Exception.message(exception)
+      end
+
     {:reply, {:error, ["Bad response from vault [#{state.url}]", reason]}, state}
   end
 

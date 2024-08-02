@@ -2,10 +2,7 @@ defmodule Vaultex.Leases do
   def handle(:renew, lease, increment, state = %{token: token}) do
     body = %{"lease_id" => lease, "increment" => increment}
 
-    request(:put, "#{state.url}sys/leases/renew", body, [
-      {"Content-Type", "application/json"},
-      {"X-Vault-Token", token}
-    ])
+    request(:put, "#{state.url}sys/leases/renew", body, [{"x-vault-token", token}])
     |> handle_response(state)
   end
 
@@ -14,13 +11,19 @@ defmodule Vaultex.Leases do
   end
 
   defp handle_response({:ok, response}, state) do
-    case response.body |> Poison.decode!() do
+    case response.body do
       %{"errors" => messages} -> {:reply, {:error, messages}, state}
       parsed_resp -> {:reply, {:ok, parsed_resp}, state}
     end
   end
 
-  defp handle_response({_, %HTTPoison.Error{reason: reason}}, state) do
+  defp handle_response({:error, exception}, state) do
+    reason =
+      case exception do
+        %{reason: reason} -> reason
+        _ -> Exception.message(exception)
+      end
+
     {:reply, {:error, ["Bad response from vault [#{state.url}]", reason]}, state}
   end
 

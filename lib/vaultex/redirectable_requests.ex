@@ -1,56 +1,43 @@
 defmodule Vaultex.RedirectableRequests do
-  # Is there a better way to get the default HTTPoison value? When this library is consumed by a Client
-  # the config files in Vaultex appear to be ignored.
-  @httpoison Application.compile_env(:vaultex, :httpoison) || HTTPoison
+  @doc """
+  Make an HTTP request using Req
 
-  def request(method, url, params = %{}, headers, options \\ []) do
-    options = if ssl_skip_verify?(), do: [{:hackney, [:insecure]} | options], else: options
+  Req by default encodes the body data as JSON, follows redirects, and uses
+  secure SSL defaults.
+  """
+  def request(method, url, body, headers, _opts \\ []) do
+    Req.Request.new()
 
-    options =
-      if certificate_path(),
-        do: [{:ssl, [verify: :verify_peer, cacertfile: certificate_path()]} | options],
-        else: options
-
-    @httpoison.request(method, url, Poison.encode!(params, []), headers, options)
-    |> follow_redirect(method, params, headers)
+    [
+      method: method,
+      url: url,
+      json: body,
+      headers: default_headers() ++ headers
+    ]
+    |> Keyword.merge(ssl_skip_verify?())
+    |> Keyword.merge(Application.get_env(:vaultex, :req_opts, []))
+    |> Req.request()
   end
 
-  defp header_location(headers) do
-    {_field, redirect_to} =
-      headers
-      |> Enum.find(fn {name, _value} -> "Location" == name end)
-
-    redirect_to
+  defp default_headers() do
+    [
+      {"content-type", "application/json"},
+      {"accept", "application/json"}
+    ]
   end
 
-  defp follow_redirect({:error, response}, _method, _params, _headers) do
-    {:error, response}
-  end
+  # whether we should skip verifying the Vault server's TLS certificate
+  def ssl_skip_verify?() do
+    skip_verify =
+      System.get_env("VAULT_SSL_VERIFY") ||
+        System.get_env("SSL_SKIP_VERIFY") ||
+        Application.get_env(:vaultex, :vault_ssl_verify) ||
+        false
 
-  defp follow_redirect({:ok, response}, method, params, headers) do
-    if Map.has_key?(response, :status_code) do
-      follow_redirect({:ok, response}, method, params, headers, response.status_code)
+    if skip_verify do
+      [connect_options: [transport_opts: [verify: :verify_none]]]
     else
-      {:ok, response}
+      []
     end
-  end
-
-  defp follow_redirect({:ok, response}, method, params, headers, 307) do
-    request(method, header_location(response.headers), params, headers)
-  end
-
-  defp follow_redirect({:ok, response}, _method, _params, _headers, _status_code) do
-    {:ok, response}
-  end
-
-  defp ssl_skip_verify?() do
-    System.get_env("VAULT_SSL_VERIFY") ||
-      System.get_env("SSL_SKIP_VERIFY") ||
-      Application.get_env(:vaultex, :vault_ssl_verify) ||
-      false
-  end
-
-  defp certificate_path do
-    System.get_env("VAULT_CACERT") || System.get_env("SSL_CERT_FILE")
   end
 end
