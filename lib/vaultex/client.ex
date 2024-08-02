@@ -2,8 +2,8 @@ defmodule Vaultex.Client do
   @moduledoc """
   Provides a functionality to authenticate and read from a vault endpoint.
   """
-
   use GenServer
+
   alias Vaultex.Auth, as: Auth
   alias Vaultex.Read, as: Read
   alias Vaultex.Write, as: Write

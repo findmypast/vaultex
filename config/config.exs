@@ -28,6 +28,4 @@ import Config
 #
 #     import_config "#{Mix.env}.exs"
 
-config :vaultex, httpoison: HTTPoison
-
 import_config "#{Mix.env()}.exs"
