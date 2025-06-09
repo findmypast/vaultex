@@ -1,0 +1,27 @@
+version: '2'
+vars:
+  registry: fh1-harbor01.dun.fh
+  service_name: vaultex
+
+tasks:
+  build:
+    do: shell
+    command: docker build --force-rm -t <%=registry%>/findmypast/<%=service_name%>:<%=version%> .
+
+  push:
+    do: shell
+    command: docker push <%=registry%>/findmypast/<%=service_name%>:<%=version%>
+
+  # Run unit tests inside a container
+  test:
+    do: shell
+    command: docker run --name vaultex-test-runner --rm <%=registry%>/findmypast/<%=service_name%>:<%=version%> mix test
+
+  # Publish to Hex Repository
+  publish:
+    do: shell
+    command: docker run -e HEX_USER -e HEX_PASSWORD --name vaultex-publisher --rm <%=registry%>/findmypast/<%=service_name%>:<%=version%> ./publish.sh
+    env:
+      - HEX_USER=<%=user%>
+      - HEX_PASSWORD=<%=password%>
+      - LOCAL_PWD=<%=password%>
